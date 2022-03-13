@@ -1,1 +1,1 @@
-"# stv_8_jandova_kuklovsky_frontend" 
+# stv_8_jandova_kuklovsky_frontend
