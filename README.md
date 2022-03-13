@@ -1,3 +1,11 @@
-# stv_8_jandova_kuklovsky_frontend
+# MTAA Frontend
+## Online knihkupectvo BOKKS
+### Autori: Alexandra Jandová a Michal Kuklovský
 
-Raz tu bude aj kod xD
+## TODO
+
+- vybrat framework
+  - Kotlin
+  - React
+  - Flutter
+- raz tu bude aj kod xD
