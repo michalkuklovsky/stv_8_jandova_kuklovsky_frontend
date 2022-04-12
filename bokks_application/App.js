@@ -1,67 +1,50 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native';
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-const homeURL = 'http://192.168.56.1:8000/';
+import LoginScreen from "./screens/LoginScreen";
+import CallScreen from "./screens/CallScreen";
+import Genres from "./screens/GenresCategories";
+import Homepage from "./screens/Homepage";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [isLoading, setLoading] = useState(true);
-  const [books, setBooks] = useState([]);
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    fetch(homeURL, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(json => {
-        setBooks(json.books);
-        setEvents(json.events);
-      })
-      .catch(error => alert(error))
-      .finally(() => setLoading(false));
-  });
 
   return (
-    <SafeAreaView>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <View>
-          <Text>Books</Text>
-          <FlatList
-            data={books}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}, index) => (
-              <Text>
-                Title: {item.title}
-                <Text> </Text>
-                ISBN: {item.isbn}
-              </Text>
-            )}
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+              name="Homepage"
+              component={Homepage}
+              options={{headerShown: false}}
           />
-          <Text>Events</Text>
-          <FlatList
-            data={events}
-            keyExtractor={({id}, index) => id}
-            renderItem={({item}, index) => (
-              <Text>
-                Title: {item.name}
-                <Text> </Text>
-                User ID: {item.user_id}
-              </Text>
-            )}
+
+          <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{headerShown: false}}
           />
-        </View>
-      )}
-    </SafeAreaView>
+          <Stack.Screen
+              name="Call"
+              component={CallScreen}
+          />
+          <Stack.Screen
+              name="Genres"
+              component={Genres}
+              options={{headerShown: false}}
+          />
+
+
+          {/*<Stack.Screen*/}
+          {/*    name="DrawerNavigationRoutes"*/}
+          {/*    component={DrawerNavigationRoutes}*/}
+          {/*    // Hiding header for Navigation Drawer*/}
+          {/*    options={{headerShown: false}}*/}
+          {/*/>*/}
+
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 };
 
