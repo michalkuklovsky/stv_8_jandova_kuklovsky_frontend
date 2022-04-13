@@ -11,7 +11,7 @@ import {
 // const homeURL = 'http://192.168.56.1:8000/';
 const homeURL = 'http://192.168.200.185:8000/';
 
-const Homepage = () => {
+const HomeScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const [books, setBooks] = useState([]);
   const [events, setEvents] = useState([]);
@@ -65,4 +65,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomeScreen;
