@@ -1,62 +1,84 @@
 import {
   Text,
+  useColorScheme,
   StyleSheet,
   View,
   SafeAreaView,
   StatusBar,
-  ScrollView,
-} from 'react-native';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  ActivityIndicator,
+  FlatList
+} from "react-native";
+import {Colors} from "react-native/Libraries/NewAppScreen";
+import React, {useEffect, useState} from "react";
 
-const Section = ({children, title}) => {
-  return (
-    <View style={styles.sectionContainer}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <Text style={styles.sectionDescription}>{children}</Text>
-    </View>
-  );
-};
+const genresURL = 'http://192.168.200.185:8000/genres'
 
 const Genres = () => {
-  fetch('localhost:8000/genres', {
-    method: 'GET',
-  })
-    .then(response => response.json())
-    .then(response => console.log(response.data))
-    .catch(error => alert(error));
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([])
+
+  // const getGenres = async () => {
+  //     try {
+  //         const response = await fetch(genresURL, {
+  //             method: 'GET'
+  //         })
+  //             .then(response => response.json())
+  //             .then((json) => setData(json.genres))
+  //             .catch(error => alert(error));
+  //     }
+  // }
+
+  useEffect(() => {
+        fetch(genresURL, {
+          method: 'GET',
+        })
+            .then(response => response.json())
+            .then(json => setData(json.genres))
+            .catch(error => alert(error))
+            .then(setLoading(false));
+      }
+  )
 
   return (
-    <SafeAreaView style={Colors.lighter}>
-      <StatusBar barStyle="light-content" />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={Colors.lighter}>
-        <Header />
-        <View style={Colors.white}>
-          <Section title="Step One">HELLO</Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <SafeAreaView style={Colors.lighter} >
+        {isLoading ? <ActivityIndicator/> : (
+            <View>
+              <Text style={styles.sectionTitle}> Genres </Text>
+              <View>
+                <FlatList
+                    data={data}
+                    keyExtractor={( {id}, index) => id}
+                    renderItem={({item}) => (
+                        <View style={styles.sectionContainer}>
+                          <Text style={styles.sectionTitle} adjustsFontSizeToFit={true} numberOfLines={1}>
+                            {item.name}
+                          </Text>
+                        </View>
+                    )}
+                />
+              </View>
+            </View>
+        )
+        }
+      </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
+    margin: 20,
+    width: 160,
+    height: 160,
     paddingHorizontal: 24,
+    borderRadius: 90,
+    backgroundColor: 'blue',
+    justifyContent: "center",
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: '500',
+    textAlign: "center",
   },
   sectionDescription: {
     marginTop: 8,
