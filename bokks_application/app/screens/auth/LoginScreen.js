@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
-// import AsyncStorage from '@react-native-community/async-storage';
+import {appURL} from "../../constants";
+
+const loginURL = appURL + 'login';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -9,46 +11,21 @@ export default function LoginScreen() {
   const data = {email: email, password: password};
   const [loading, setLoading] = useState(false);
 
-  // const onLogin = async () => {
-  //     setLoading(true);
-  //     try {
-  //         await AsyncStorage.setItem('userId', userId);
-  //         setLoading(false);
-  //         props.navigation.push('Call');
-  //     } catch (err) {
-  //         console.log('Error', err);
-  //         setLoading(false);
-  //     }
-  // };
-
   const onLogin = () => {
     setLoading(true);
 
-    fetch('localhost:8000/login', {
+    fetch(loginURL, {
       method: 'POST',
       headers: {
-        // 'Accept': 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      // .then(function (response) {
-      //     return response.json();
-      // })
-      // .then(function (data) {
-      //     console.log(data)
-      // })
       .then(response => response.json())
-      // .then(data => this.setState({ postId: data.id }));
       .then(response => console.log(response.data))
-      .catch(function (error) {
-        console.log(
-          'There has been a problem with your fetch operation: ' +
-            error.message,
-        );
-        // ADD THIS THROW error
-        throw error;
-      });
+      .catch(error => alert(error))
+      .then(setLoading(false));
   };
 
   return (
