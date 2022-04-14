@@ -1,9 +1,14 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../screens/home/homepage';
+
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import HomeScreen from '../screens/home/Homepage';
 import LoginScreen from '../screens/auth/LoginScreen';
 import Genres from '../screens/books/GenresCategories';
 import CallScreen from '../screens/events/CallScreen';
+import BookListScreen from '../screens/books/Books';
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -17,29 +22,77 @@ const Navigator = () => {
         statusbar: 'none',
       }}>
       <Stack.Screen
-        name="Homepage"
-        component={HomeScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
+        name="NavBar"
+        component={NavigationBar}
         options={{headerShown: false}}
       />
       <Stack.Screen name="Call" component={CallScreen} />
-      <Stack.Screen
+    </Stack.Navigator>
+  );
+};
+
+const homeName = 'Home';
+const genresName = 'Genres';
+const loginName = 'Login';
+const booksListName = 'Books';
+
+const Tab = createBottomTabNavigator();
+
+const NavigationBar = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName={homeName}
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          let rn = route.name;
+
+          if (rn === homeName) {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (rn === genresName) {
+            iconName = focused ? 'search' : 'search-outline';
+          } else if (rn === loginName) {
+            iconName = focused ? 'person' : 'person-outline';
+          } else if (rn === booksListName) {
+            iconName = focused ? 'list' : 'list-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#006BFF',
+        tabBarInactiveTintColor: 'grey',
+        tabBarLabelStyle: {
+          paddingBottom: 10,
+          fontSize: 10,
+        },
+        tabBarStyle: [
+          {
+            display: 'flex',
+          },
+          null,
+        ],
+      })}>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
         name="Genres"
         component={Genres}
         options={{headerShown: false}}
       />
-
-      {/*<Stack.Screen*/}
-      {/*    name="DrawerNavigationRoutes"*/}
-      {/*    component={DrawerNavigationRoutes}*/}
-      {/*    // Hiding header for Navigation Drawer*/}
-      {/*    options={{headerShown: false}}*/}
-      {/*/>*/}
-    </Stack.Navigator>
+      <Tab.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Books"
+        component={BookListScreen}
+        options={{headerShown: false}}
+      />
+    </Tab.Navigator>
   );
 };
 
