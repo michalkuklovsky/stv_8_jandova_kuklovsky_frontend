@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
 // import AsyncStorage from '@react-native-community/async-storage';
+import appURL from '../../Constants';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -21,10 +22,12 @@ export default function LoginScreen() {
   //     }
   // };
 
+  const loginURL = appURL + 'login';
+
   const onLogin = () => {
     setLoading(true);
 
-    fetch('localhost:8000/login', {
+    fetch(loginURL, {
       method: 'POST',
       headers: {
         // 'Accept': 'application/json',
@@ -47,8 +50,9 @@ export default function LoginScreen() {
             error.message,
         );
         // ADD THIS THROW error
-        throw error;
-      });
+        // throw error;
+      })
+      .finally(setLoading(false));
   };
 
   return (

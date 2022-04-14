@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-import appURL from '../../Constants';
+import {appURL} from '../../Constants';
 
 const homeURL = appURL;
 
