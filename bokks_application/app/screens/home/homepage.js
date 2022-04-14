@@ -8,10 +8,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'react-native-paper';
+import appURL from '../../Constants';
 
-const homeURL = 'http://147.175.182.110:8000/';
-// const homeURL = 'http://147.175.160.194:8000/';
-// const homeURL = 'http://10.62.44.90:8000/';
+const homeURL = appURL;
 
 const HomeScreen = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);

@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen";
 import React, {useEffect, useState} from "react";
+import appURL from '../../Constants';
 
-const genresURL = 'http://192.168.200.185:8000/genres'
+const genresURL = appURL;
 
 const Genres = () => {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
   // const getGenres = async () => {
   //     try {
