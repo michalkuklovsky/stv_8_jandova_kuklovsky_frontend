@@ -8,7 +8,7 @@ import HomeScreen from '../screens/home/Homepage';
 import LoginScreen from '../screens/auth/LoginScreen';
 import Genres from '../screens/books/GenresCategories';
 import CallScreen from '../screens/events/CallScreen';
-import BookListScreen from '../screens/books/Books';
+import BooksListScreen from '../screens/books/BooksList';
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -89,7 +89,7 @@ const NavigationBar = () => {
       />
       <Tab.Screen
         name="Books"
-        component={BookListScreen}
+        component={BooksListScreen}
         options={{headerShown: false}}
       />
     </Tab.Navigator>
