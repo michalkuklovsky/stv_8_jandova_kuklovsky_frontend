@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
-<<<<<<< HEAD
 // import AsyncStorage from '@react-native-community/async-storage';
 import appURL from '../../Constants';
-=======
-import {appURL} from "../../constants";
 
 const loginURL = appURL + 'login';
->>>>>>> c3cf504a24135c77cf61984076bc9c611ce83e3e
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -16,7 +12,6 @@ export default function LoginScreen() {
   const data = {email: email, password: password};
   const [loading, setLoading] = useState(false);
 
-<<<<<<< HEAD
   // const onLogin = async () => {
   //     setLoading(true);
   //     try {
@@ -31,8 +26,6 @@ export default function LoginScreen() {
 
   const loginURL = appURL + 'login';
 
-=======
->>>>>>> c3cf504a24135c77cf61984076bc9c611ce83e3e
   const onLogin = () => {
     setLoading(true);
 
