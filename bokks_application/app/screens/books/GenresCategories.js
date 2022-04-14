@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen";
 import React, {useEffect, useState} from "react";
-import {appURL} from "../../constants";
+import {appURL} from "../../Constants";
 
 const genresURL = appURL + 'genres';
 
