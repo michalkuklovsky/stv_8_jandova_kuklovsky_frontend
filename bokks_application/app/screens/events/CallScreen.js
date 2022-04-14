@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
 import {Text} from 'react-native-paper';
 import {Button} from 'react-native-paper';
-// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TextInput} from 'react-native-paper';
 
 import {useFocusEffect} from '@react-navigation/native';

@@ -7,11 +7,13 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
+import {Button} from 'react-native-paper';
 
-// const homeURL = 'http://192.168.56.1:8000/';
-const homeURL = 'http://192.168.200.185:8000/';
+const homeURL = 'http://147.175.182.110:8000/';
+// const homeURL = 'http://147.175.160.194:8000/';
+// const homeURL = 'http://10.62.44.90:8000/';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [books, setBooks] = useState([]);
   const [events, setEvents] = useState([]);
@@ -27,7 +29,7 @@ const HomeScreen = () => {
       })
       .catch(error => alert(error))
       .finally(() => setLoading(false));
-  });
+  }, []);
 
   return (
     <SafeAreaView>
@@ -59,10 +61,26 @@ const HomeScreen = () => {
               </Text>
             )}
           />
+          <Button
+            title="Go to Details"
+            onPress={() => navigation.navigate('Call')}
+            style={styles.btn}
+          />
         </View>
       )}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  btn: {
+    backgroundColor: '#fff',
+    height: 60,
+    borderRadius: 25,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    fontSize: 18,
+  },
+});
 
 export default HomeScreen;
