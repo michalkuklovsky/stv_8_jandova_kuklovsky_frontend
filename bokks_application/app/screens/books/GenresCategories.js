@@ -13,36 +13,26 @@ import {appURL} from "../../Constants";
 
 const genresURL = appURL + 'genres';
 
-const Genre = ({item}) => {
+const Genre = ({navigation, genre}) => {
   const onPressed = () => {
-    console.log(item.id, item.name);
-    useEffect(() => {
-      fetch( genresURL+item.name, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-      })
-          .then(response => response.json())
-          .then(json => setData(json.books))
-          .catch(error => alert(error))
-
-    })
+    navigation.navigate("GenreResults", {id: genre.id, name: genre.name})
   }
 
   return (
       <Pressable onPress={onPressed}>
         <View style={styles.genreContainer}>
           <Text style={styles.sectionTitle} adjustsFontSizeToFit={true} numberOfLines={1}>
-            {item.name}
+            {genre.name}
           </Text>
         </View>
       </Pressable>
   )
 }
 
-const Genres = () => {
+const Genres = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const renderItem = ({item}) => (<Genre item={item}/>);
+  const renderItem = ({item}) => (<Genre genre={item} navigation={navigation}/>);
 
   useEffect(() => {
       fetch(genresURL, {

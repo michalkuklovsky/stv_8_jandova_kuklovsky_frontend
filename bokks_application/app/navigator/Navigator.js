@@ -9,24 +9,25 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import Genres from '../screens/books/GenresCategories';
 import CallScreen from '../screens/events/CallScreen';
 import BooksListScreen from '../screens/books/BooksList';
+import GenreResults from "../screens/books/GenresResults";
+import SearchScreen from "../screens/books/SearchScreen";
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator
-      initialRouteName="Homepage"
-      screenOptions={{
-        headerShown: false,
-        headerMode: 'none',
-        statusbar: 'none',
-      }}>
-      <Stack.Screen
-        name="NavBar"
-        component={NavigationBar}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="Call" component={CallScreen} />
+      <Stack.Navigator
+          initialRouteName="Homepage"
+          screenOptions={{
+            headerShown: false,
+            headerMode: 'none',
+            statusbar: 'none',
+          }}>
+
+        <Stack.Screen name="NavBar" component={NavigationBar} options={{headerShown: false}} />
+        <Stack.Screen name="Call" component={CallScreen} />
+        <Stack.Screen name="BooksList" component={BooksListScreen} />
+        <Stack.Screen name="GenreResults" component={GenreResults} />
     </Stack.Navigator>
   );
 };
@@ -34,7 +35,7 @@ const Navigator = () => {
 const homeName = 'Home';
 const genresName = 'Genres';
 const loginName = 'Login';
-const booksListName = 'Books';
+const search = 'Search';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,21 +43,20 @@ const NavigationBar = () => {
   return (
     <Tab.Navigator
       initialRouteName={homeName}
-      screenOptions={({route}) => ({
+      screenOptions={( {route} ) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           let rn = route.name;
 
           if (rn === homeName) {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (rn === genresName) {
+          } else if  (rn === search) {
             iconName = focused ? 'search' : 'search-outline';
           } else if (rn === loginName) {
             iconName = focused ? 'person' : 'person-outline';
-          } else if (rn === booksListName) {
+          } else if (rn === genresName) {
             iconName = focused ? 'list' : 'list-outline';
           }
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#006BFF',
@@ -78,20 +78,20 @@ const NavigationBar = () => {
         options={{headerShown: false}}
       />
       <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
         name="Genres"
         component={Genres}
         options={{headerShown: false}}
       />
-      <Tab.Screen
+        <Tab.Screen
         name="Login"
         component={LoginScreen}
         options={{headerShown: false}}
-      />
-      <Tab.Screen
-        name="Books"
-        component={BooksListScreen}
-        options={{headerShown: false}}
-      />
+        />
     </Tab.Navigator>
   );
 };

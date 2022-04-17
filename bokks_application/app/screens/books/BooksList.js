@@ -13,19 +13,24 @@ import {appURL} from "../../Constants";
 
 const booksURL = appURL + 'books';
 
+const Book = () => {
+
+}
+
 const BooksListScreen = ({navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        fetch(homeURL, {
+        fetch(booksURL, {
             method: 'GET',
         })
             .then(response => response.json())
             .then(json => {
                 setBooks(json.books);
                 setEvents(json.events);
+                navigation.navigate();
             })
             .catch(error => alert(error))
             .finally(() => setLoading(false));
