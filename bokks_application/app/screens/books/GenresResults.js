@@ -1,44 +1,31 @@
 import React, {useEffect, useState} from "react";
-import {ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, View, Image} from "react-native";
+import {ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, ScrollView, View, Image} from "react-native";
 import { Card, Title, Paragraph } from "react-native-paper";
 import {Colors} from "react-native/Libraries/NewAppScreen";
 import {appURL} from "../../Constants";
 import base64 from 'react-native-base64';
 
-
 const genresURL = appURL + 'genres';
-const storagePath = 'C:/Users/alexa/OneDrive - Slovenská technická univerzita v Bratislave/3 LS/MTAA/Zadanie2/backend/bokksapp/resources/books/';
 
 const Book = ({navigation, book}) => {
-    // const
     const onPressed = () => {
-        // navigation.navigate("BookId", {id: book.id})
+        navigation.navigate("BookDetail", {id: book.id})
     }
-    const [image, setImage] = useState(undefined)
-
-    useEffect(() => {
-            fetch(  appURL+'books/'+book.id+'/'+book.img_path, {
-                method: 'GET',
-            })
-                .then(response => response.json())
-                .then(json => {
-                    setImage(json.image);
-                    // console.log(json.image);
-                } )
-                .catch(error => alert(error))
-        }, []
-    )
 
     return (
+        // <View>
         <Pressable onPress={onPressed}>
-            <Card>
-                <Title> {book.title} </Title>
-                <Paragraph> {book.price} €</Paragraph>
-                {/*<Card.Cover style={styles.logo} source={{uri: appURL+'books/'+book.id+'/'+book.img_path}} />*/}
-                {/*<Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />*/}
-                <Card.Cover style={styles.logo} source={{uri: {image} }}/>
+            <Card style={styles.card}>
+                <View style={styles.imageContainer}>
+                    <Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
+                    {/*    /!*<Card.Cover style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />*!/*/}
+
+                </View>
+                <Title style={styles.imgTitle}> {book.title} </Title>
+                <Paragraph style={styles.imgSub}> {book.price} € </Paragraph>
             </Card>
         </Pressable>
+        // </View>
     )
 }
 
@@ -49,7 +36,6 @@ const GenreResults = ({navigation, route}) => {
     useEffect(() => {
           fetch( genresURL + '/?query=' + route.params.name, {
             method: 'GET',
-            headers: {'Content-Type': 'application/json'},
           })
               .then(response => response.json())
               .then(json => setBooks(json.books))
@@ -60,16 +46,18 @@ const GenreResults = ({navigation, route}) => {
     return (
         <SafeAreaView>
             {isLoading ? <ActivityIndicator/> : (
-                <View>
-                    <View>
+                <View style={styles.mainContainer}>
+                    <View style={styles.titleContainer}>
                         <Text style={styles.mainTitle}> Results </Text>
                     </View>
                     <FlatList
                         data={books}
                         keyExtractor={( {id}, index) => id}
-                        renderItem={({item}) => (<Book book={item}/>)}
+                        renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
                         numColumns={2}
-                        styles={styles.listContainer}
+                        styles={styles.booksList}
+                        contentContainerStyle={styles.listContainer}
+                        nestedScrollEnabled={true}
                     />
                 </View>
             )
@@ -79,23 +67,51 @@ const GenreResults = ({navigation, route}) => {
 
 }
 const styles = StyleSheet.create({
+    mainContainer:{
+        padding: 10,
+        flexWrap: "wrap",
+    },
+    titleContainer:{
+        padding: 8,
+    },
     mainTitle: {
-        fontSize: 26,
+        fontSize: 24,
         fontWeight: "500",
         textAlign: "center",
         color: "black",
     },
-    listContainer:{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        alignContent: "center",
+    booksList: {
+        flexGrow: 1,
+        backgroundColor: "blue",
+    },
+    listContainer: {
+        marginHorizontal: 8,
     },
     logo: {
         width: 100,
-        height: 100,
+        height: 120,
+        borderRadius: 10,
     },
+    imageContainer: {
+        alignItems: "center",
+        paddingTop: 10,
+        paddingBottom: 5,
+    },
+    card: {
+        width: 140,
+        height: 220,
+        borderRadius: 10,
+        shadowOpacity: 0.25,
+        marginTop: 10,
+        marginHorizontal: 20,
+    },
+    imgTitle: {
+        fontSize: 16,
+        paddingLeft: 6,
+    },
+    imgSub: {
+        paddingLeft: 6,
+    }
 })
-
 
 export default GenreResults;
