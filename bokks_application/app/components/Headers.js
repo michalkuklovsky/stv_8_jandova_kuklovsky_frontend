@@ -78,4 +78,37 @@ const styles = StyleSheet.create({
 	},
 });
 
+const HomeHeader = ({navigation}) => {
+	return (
+		<AppHeader
+              title={'BOKKS'}
+              titleOnPress={() => navigation.navigate('Home')}
+              headerBg={'blue'}
+              iconColor={'white'}
+              titleAlight={'left'}
+              right={'shopping-cart'}
+              onRightPress={() => navigation.navigate('Cart')}
+            />
+	);
+};
+
+const ScreenHeader = ({navigation}) => {
+	return (
+		<AppHeader
+            title={'BOKKS'}
+            titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
+            headerBg={'blue'}
+            iconColor={'white'}
+            titleAlight={'center'}
+            right={'shopping-cart'}
+            onRightPress={() => navigation.navigate('Cart')}
+            back
+            backOnPress={() => navigation.pop()}
+          />
+	);
+};
+
+export {
+	HomeHeader, ScreenHeader,
+};
 export default AppHeader;
