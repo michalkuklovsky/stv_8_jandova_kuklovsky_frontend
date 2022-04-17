@@ -65,6 +65,13 @@ const HomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('Call')}
             style={styles.btn}
           />
+          <Button
+            title="HELLO"
+            onPress={() =>
+              navigation.navigate('NavigationBar', {screen: 'Genres'})
+            }
+            style={styles.btn}
+          />
         </View>
       )}
     </SafeAreaView>

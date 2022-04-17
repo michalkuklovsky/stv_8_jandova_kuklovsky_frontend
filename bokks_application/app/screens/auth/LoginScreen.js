@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
-// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import appURL from '../../Constants';
 
-const loginURL = appURL + 'login';
+// const loginURL = appURL + 'login';
+const loginURL = 'http://147.175.182.110:8000/login';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const data = {email: email, password: password};
+  const [user, setUser] = useState('');
   const [loading, setLoading] = useState(false);
 
   // const onLogin = async () => {
@@ -24,28 +26,66 @@ export default function LoginScreen() {
   //     }
   // };
 
-  const onLogin = () => {
-    setLoading(true);
+  // const onLogin = () => {
+  //   setLoading(true);
 
+  //   fetch(loginURL, {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then(response => response.json())
+  //     .then(response => console.log(response.data))
+  //     .catch(function (error) {
+  //       console.log(
+  //         'There has been a problem with your fetch operation: ' +
+  //           error.message,
+  //       );
+  //       // ADD THIS THROW error
+  //       // throw error;
+  //     })
+  //     .finally(setLoading(false));
+  // };
+
+  const onLogin = ({navigation}) => {
+    let tmpstatus;
+    const tmp = {
+      'email': 'michal@email.com',
+      'password': 'pass123',
+    };
     fetch(loginURL, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(tmp),
     })
-      .then(response => response.json())
-      .then(response => console.log(response.data))
-      .catch(function (error) {
+      .then(response => {
+        tmpstatus = response.status;
+        console.log(response.status);
+        this.props.navigation.navigate('NavigationBar', {screen: 'Homepage'});
+      })
+      // .then(res => {
+      //   AsyncStorage.setItem('user', JSON.stringify(res.data));
+      //   setUser(res.data);
+      //   navigation.navigate('Homepage');
+      // })
+      .catch(error => {
         console.log(
           'There has been a problem with your fetch operation: ' +
             error.message,
         );
-        // ADD THIS THROW error
-        // throw error;
       })
-      .finally(setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
+    // if (tmpstatus === 204) {
+    //   navigation.navigate('NavigationBar', {screen: 'Homepage'});
+    // }
   };
 
   return (
