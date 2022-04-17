@@ -8,7 +8,7 @@ const loginURL = appURL + 'login';
 const logoutURL = appURL + 'logout';
 
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const data = {email: email, password: password};
@@ -51,12 +51,8 @@ export default function LoginScreen() {
   //     .finally(setLoading(false));
   // };
 
-  const onLogin = ({navigation}) => {
+  const onLogin = () => {
     let tmpstatus;
-    // const tmp = {
-    //   'email': 'michal@email.com',
-    //   'password': 'pass123',
-    // };
     fetch(loginURL, {
       method: 'POST',
       headers: {
@@ -68,8 +64,8 @@ export default function LoginScreen() {
       .then(response => {
         tmpstatus = response.status;
         console.log('login: ' + response.status);
-        // navigation.navigate('NavBar', {screen: 'Homepage'});
       })
+      .then(navigation.navigate('Home'))
       // .then(res => {
       //   AsyncStorage.setItem('user', JSON.stringify(res.data));
       //   setUser(res.data);
