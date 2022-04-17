@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-import appURL from '../../Constants';
+import {appURL} from '../../Constants';
 
 const homeURL = appURL;
 
@@ -35,25 +35,25 @@ const HomeScreen = ({navigation}) => {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <View>
-          <Text>Books</Text>
+        <View style={StyleSheet.create({padding: 20})}>
+          <Text style={styles.mainText}>Books</Text>
           <FlatList
             data={books}
             keyExtractor={({id}, index) => id}
             renderItem={({item}, index) => (
-              <Text>
+              <Text style={styles.mainText}>
                 Title: {item.title}
                 <Text> </Text>
                 ISBN: {item.isbn}
               </Text>
             )}
           />
-          <Text>Events</Text>
+          <Text style={styles.mainText}>Events</Text>
           <FlatList
             data={events}
             keyExtractor={({id}, index) => id}
             renderItem={({item}, index) => (
-              <Text>
+              <Text style={styles.mainText}>
                 Title: {item.name}
                 <Text> </Text>
                 User ID: {item.user_id}
@@ -80,6 +80,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontSize: 18,
   },
+  mainText: {
+    color: 'black',
+  }
 });
 
 export default HomeScreen;
