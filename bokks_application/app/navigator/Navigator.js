@@ -9,8 +9,9 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import Genres from '../screens/books/GenresCategories';
 import CallScreen from '../screens/events/CallScreen';
 import BooksListScreen from '../screens/books/BooksList';
-import GenreResults from "../screens/books/GenresResults";
-import SearchScreen from "../screens/books/SearchScreen";
+import GenreResults from '../screens/books/GenresResults';
+import SearchScreen from '../screens/books/SearchScreen';
+import CartScreen from '../screens/cart/Cart';
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -28,6 +29,8 @@ const Navigator = () => {
         <Stack.Screen name="Call" component={CallScreen} />
         <Stack.Screen name="BooksList" component={BooksListScreen} />
         <Stack.Screen name="GenreResults" component={GenreResults} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen name="Cart" component={CartScreen} />
     </Stack.Navigator>
   );
 };
