@@ -97,13 +97,13 @@ const HomeScreen = ({navigation}) => {
             </Button>
 
             <Button
-              title="GenresCategories"
+              title="EventsList"
               color="white"
               onPress={() =>
-                navigation.navigate('NavBar', {screen: 'Genres'})
+                navigation.navigate('EventsList')
               }
               style={styles.btn}
-            >{'GenresCategories'}
+            >{'EventsList'}
             </Button>
 
             <Button

@@ -13,6 +13,7 @@ import GenreResults from '../screens/books/GenresResults';
 import SearchScreen from '../screens/books/SearchScreen';
 import CartScreen from '../screens/cart/Cart';
 import BookDetailScreen from '../screens/books/BookDetail';
+import EventsScreen from '../screens/events/EventsList';
 
 
 const Navigator = () => {
@@ -34,6 +35,7 @@ const Navigator = () => {
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="BookDetail" component={BookDetailScreen} />
+        <Stack.Screen name="EventsList" component={EventsScreen} />
     </Stack.Navigator>
   );
 };
