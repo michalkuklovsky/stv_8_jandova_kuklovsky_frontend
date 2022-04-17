@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-import AppHeader from '../../components/Headers';
+import AppHeader, { HomeHeader } from '../../components/Headers';
 import {appURL} from '../../Constants';
 
 
@@ -39,15 +39,7 @@ const HomeScreen = ({navigation}) => {
       ) : (
         <View>
           <View>
-            <AppHeader
-              title={'BOKKS'}
-              titleOnPress={() => navigation.navigate('Home')}
-              headerBg={'blue'}
-              iconColor={'white'}
-              titleAlight={'left'}
-              right={'shopping-cart'}
-              onRightPress={() => navigation.navigate('Cart')}
-            />
+            <HomeHeader navigation={navigation} />
           </View>
           <View style={StyleSheet.create({padding: 20})}>
             <Text style={styles.mainText}>Books</Text>
