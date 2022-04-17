@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import appURL from '../../Constants';
+import {appURL} from '../../Constants';
 
-// const loginURL = appURL + 'login';
-const loginURL = 'http://147.175.182.110:8000/login';
+const loginURL = appURL + 'login';
+const logoutURL = appURL + 'logout';
+
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -52,22 +53,22 @@ export default function LoginScreen() {
 
   const onLogin = ({navigation}) => {
     let tmpstatus;
-    const tmp = {
-      'email': 'michal@email.com',
-      'password': 'pass123',
-    };
+    // const tmp = {
+    //   'email': 'michal@email.com',
+    //   'password': 'pass123',
+    // };
     fetch(loginURL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(tmp),
+      body: JSON.stringify(data),
     })
       .then(response => {
         tmpstatus = response.status;
-        console.log(response.status);
-        this.props.navigation.navigate('NavigationBar', {screen: 'Homepage'});
+        console.log('login: ' + response.status);
+        // navigation.navigate('NavBar', {screen: 'Homepage'});
       })
       // .then(res => {
       //   AsyncStorage.setItem('user', JSON.stringify(res.data));
@@ -86,6 +87,30 @@ export default function LoginScreen() {
     // if (tmpstatus === 204) {
     //   navigation.navigate('NavigationBar', {screen: 'Homepage'});
     // }
+  };
+
+  const onLogout = ({navigation}) => {
+    let tmpstatus;
+    fetch(logoutURL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        tmpstatus = response.status;
+        console.log('logout: ' + response.status);
+      })
+      .catch(error => {
+        console.log(
+          'There has been a problem with your fetch operation: ' +
+            error.message,
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -116,6 +141,17 @@ export default function LoginScreen() {
           // disabled={userId.length === 0}
         >
           <Text>LOGIN</Text>
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={onLogout}
+          loading={loading}
+          style={styles.btn}
+          contentStyle={styles.btnContent}
+          // disabled={userId.length === 0}
+        >
+          <Text>LOGOUT</Text>
         </Button>
       </View>
     </View>
