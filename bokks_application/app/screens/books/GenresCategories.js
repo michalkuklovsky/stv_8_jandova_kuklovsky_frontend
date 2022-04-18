@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen";
 import React, {useEffect, useState} from "react";
+import { HomeHeader } from '../../components/Headers';
+
 import {appURL} from "../../Constants";
 
 const genresURL = appURL + 'genres';
@@ -49,8 +51,9 @@ const Genres = ({navigation}) => {
       <SafeAreaView style={Colors.lighter} >
         {isLoading ? <ActivityIndicator/> : (
             <View>
+              <HomeHeader navigation={navigation} />
               <View style={styles.mainTitleContainer}>
-              <Text style={styles.mainTitle}> Genres </Text>
+                <Text style={styles.mainTitle}> Genres </Text>
               </View>
                 <FlatList
                     data={data}
@@ -58,6 +61,7 @@ const Genres = ({navigation}) => {
                     renderItem={renderItem}
                     numColumns={2}
                     styles={styles.listContainer}
+                    nestedScrollEnabled={true}
                 />
             </View>
         )
@@ -74,14 +78,12 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   genreContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: 24,
     marginBottom: 20,
-    // width:  '50%',
-    // height: '50%',
-    width: 160,
-    height: 160,
+    width: 140,
+    height: 140,
     borderRadius: 90,
-    backgroundColor: "skyblue",
+    backgroundColor: "#96beff",
     justifyContent: "center",
   },
   sectionTitle: {

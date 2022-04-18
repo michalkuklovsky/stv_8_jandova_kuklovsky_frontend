@@ -2,12 +2,28 @@ import React, {useEffect, useState} from "react";
 import {ActivityIndicator, Pressable, SafeAreaView, StyleSheet, Text, ScrollView, View, Image} from "react-native";
 import { List, Title, Subheading, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
+import {ScreenHeader} from "../../components/Headers";
+import {NavigationBar} from "../../navigator/Navigator";
 
 const bookURL = appURL + 'books/'
+const cartURL = appURL + 'cart/add'
 
 const BookDetailScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [book, setBook] = useState({});
+
+    const addToCart = () => {
+        // useEffect(() => {
+        //         fetch( cartURL + book.id, {
+        //             method: 'POST',
+        //         })
+        //             .then(response => response.json())
+        //             .catch(error => alert(error))
+        //             .then(setLoading(false));
+        //     }, []
+        //
+        // )
+    }
 
     useEffect(() => {
             fetch( bookURL + route.params.id, {
@@ -21,19 +37,26 @@ const BookDetailScreen = ({navigation, route}) => {
     )
 
     return (
-        <View style={styles.mainContainer}>
+        <View style={styles.container}>
+            <View>
+                <ScreenHeader navigation={navigation} />
+            </View>
             {isLoading ? <ActivityIndicator/> : (
-
+            <View>
                 <ScrollView style={styles.content}>
-
                     <View style={styles.card}>
                         <View style={styles.imageContainer}>
                             <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
                         </View>
                         <View style={styles.infoContainer}>
-                            <Title style={styles.imgTitle}> {book.title} </Title>
-                            <Subheading style={styles.imgSub}> {book.authors__name}</Subheading>
-                            <Paragraph style={styles.imgSub}> {book.price} € </Paragraph>
+                            <Title style={styles.infoTitle}> {book.title} </Title>
+                            <Subheading style={styles.infoSub}> {book.authors__name}</Subheading>
+                            <Paragraph style={styles.infoPar}> {book.price} € </Paragraph>
+                            <View style={styles.btnContainer}>
+                                <Pressable style={styles.btn} onPress={addToCart}>
+                                    <Text style={styles.btnText}> Add to cart </Text>
+                                </Pressable>
+                            </View>
                         </View>
                     </View>
 
@@ -57,20 +80,24 @@ const BookDetailScreen = ({navigation, route}) => {
                     </View>
 
                 </ScrollView>
-
+            </View>
             )}
+            {/*<View>*/}
+            {/*    <NavigationBar />*/}
+            {/*</View>*/}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        padding: 20,
-        marginTop: 20,
-        // justifyContent: "space-around",
+    container: {
+        // flex: 1,
+        backgroundColor: "white",
+        height: "100%",
+        width: "100%",
     },
     content:{
+        padding: 8,
         marginLeft:10,
         marginRight:10,
         marginTop:20,
@@ -78,27 +105,23 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
         flexDirection: "row",
-        position: "relative",
-        justifyContent: 'space-between',
-        backgroundColor: "#dcdcdc",
         shadowOpacity: 0.25,
         shadowRadius: 5,
         marginVertical: 12,
     },
     imageContainer: {
+        flex: 3,
         justifyContent: "center",
-        backgroundColor: "#ddd7ff",
+        // backgroundColor: "#ddd7ff",
         flexDirection: "column",
-        flex: 2,
         alignItems: "center",
         padding: 5,
         width: "100%",
         height: 240,
     },
     infoContainer: {
+        flex: 4,
         paddingTop: 20,
-        backgroundColor: "#9980cc",
-        flex: 3,
         flexDirection: "column",
         width: "100%",
         height: 240,
@@ -107,18 +130,18 @@ const styles = StyleSheet.create({
     detailsContainer: {
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
-        backgroundColor: "#ddcae8",
-        top: 20,
+        backgroundColor: "#c7dcff",
+        top: 10,
     },
     descriptionContainer: {
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
-        backgroundColor: "#ddcae8",
+        backgroundColor: "#c7dcff",
         flex: 1,
         // flexDirection: "column",
         // width: "100%",
-        height: 240,
-        top: 40,
+        height: 200,
+        top: 50,
     },
     section: {
         padding: 10,
@@ -127,7 +150,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
-        backgroundColor: "#ddd5f0",
+        backgroundColor: "#a3c6ff",
     },
     img: {
         borderRadius: 10,
@@ -135,12 +158,39 @@ const styles = StyleSheet.create({
         width: "100%",
     },
 
-    imgTitle: {
+    infoTitle: {
+        fontSize: 20,
+        paddingLeft: 6,
+        marginTop: 8,
+    },
+    infoSub: {
         fontSize: 16,
         paddingLeft: 6,
+        marginVertical: 8,
     },
-    imgSub: {
+    infoPar: {
+        fontSize: 16,
+        fontWeight: "bold",
         paddingLeft: 6,
+        marginVertical: 8,
+    },
+    btn: {
+        width: 110,
+        height: 34,
+        margin: 8,
+        borderRadius: 20,
+        backgroundColor: "#a3c6ff",
+        justifyContent: "center",
+        elevation: 5,
+    },
+    btnText: {
+        color: "black",
+        textAlign: "center",
+    },
+    btnContainer: {
+        flex: 1,
+        padding: 14,
+        alignItems: "flex-end",
     }
 })
 
