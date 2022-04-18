@@ -14,7 +14,7 @@ import SearchScreen from '../screens/search/SearchScreen';
 import CartScreen from '../screens/cart/Cart';
 import BookDetailScreen from '../screens/books/BookDetail';
 import EventsScreen from '../screens/events/EventsList';
-
+import BookInfo from '../screens/books/BookInfo';
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -36,6 +36,7 @@ const Navigator = () => {
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="BookDetail" component={BookDetailScreen} />
         <Stack.Screen name="EventsList" component={EventsScreen} />
+        <Stack.Screen name="BookInfo" component={BookInfo} />
     </Stack.Navigator>
   );
 };
@@ -104,4 +105,7 @@ const NavigationBar = () => {
   );
 };
 
+export {
+    Navigator, NavigationBar,
+};
 export default Navigator;
