@@ -13,7 +13,9 @@ import GenreResults from '../screens/books/GenresResults';
 import SearchScreen from '../screens/search/SearchScreen';
 import CartScreen from '../screens/cart/Cart';
 import BookDetailScreen from '../screens/books/BookDetail';
-import EventsScreen from '../screens/events/EventsList';
+import EventsListScreen from '../screens/events/EventsList';
+import EventDetailScreen from '../screens/events/EventDetail';
+
 
 
 const Navigator = () => {
@@ -35,7 +37,8 @@ const Navigator = () => {
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="BookDetail" component={BookDetailScreen} />
-        <Stack.Screen name="EventsList" component={EventsScreen} />
+        <Stack.Screen name="EventsList" component={EventsListScreen} />
+        <Stack.Screen name="EventDetail" component={EventDetailScreen} />
     </Stack.Navigator>
   );
 };
@@ -105,3 +108,7 @@ const NavigationBar = () => {
 };
 
 export default Navigator;
+
+export {
+  NavigationBar,
+};
