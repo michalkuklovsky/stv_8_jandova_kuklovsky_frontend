@@ -13,6 +13,7 @@ const BookDetailScreen = ({navigation, route}) => {
     const [book, setBook] = useState({});
 
     const addToCart = () => {
+        console.log("add to cart pressed")
         // useEffect(() => {
         //         fetch( cartURL + book.id, {
         //             method: 'POST',
@@ -23,6 +24,9 @@ const BookDetailScreen = ({navigation, route}) => {
         //     }, []
         //
         // )
+    }
+    const showDetail = () => {
+        navigation.navigate("BookInfo", {book: book})
     }
 
     useEffect(() => {
@@ -43,7 +47,7 @@ const BookDetailScreen = ({navigation, route}) => {
             </View>
             {isLoading ? <ActivityIndicator/> : (
             <View>
-                <ScrollView style={styles.content}>
+                <ScrollView contentContainerStyle={styles.content}>
                     <View style={styles.card}>
                         <View style={styles.imageContainer}>
                             <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
@@ -53,8 +57,11 @@ const BookDetailScreen = ({navigation, route}) => {
                             <Subheading style={styles.infoSub}> {book.authors__name}</Subheading>
                             <Paragraph style={styles.infoPar}> {book.price} € </Paragraph>
                             <View style={styles.btnContainer}>
-                                <Pressable style={styles.btn} onPress={addToCart}>
+                                <Pressable style={styles.btn} onPress={addToCart} >
                                     <Text style={styles.btnText}> Add to cart </Text>
+                                </Pressable>
+                                <Pressable style={styles.btn} onPress={showDetail} >
+                                    <Text style={styles.btnText}> Detail </Text>
                                 </Pressable>
                             </View>
                         </View>
@@ -98,9 +105,9 @@ const styles = StyleSheet.create({
     },
     content:{
         padding: 8,
-        marginLeft:10,
-        marginRight:10,
-        marginTop:20,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
     },
     card: {
         flex: 1,
@@ -131,17 +138,13 @@ const styles = StyleSheet.create({
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
         backgroundColor: "#c7dcff",
-        top: 10,
+        marginTop: 20,
     },
     descriptionContainer: {
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
         backgroundColor: "#c7dcff",
-        flex: 1,
-        // flexDirection: "column",
-        // width: "100%",
-        height: 200,
-        top: 50,
+        marginTop: 20,
     },
     section: {
         padding: 10,
