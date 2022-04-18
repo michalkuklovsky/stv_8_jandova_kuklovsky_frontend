@@ -108,7 +108,35 @@ const ScreenHeader = ({navigation}) => {
 	);
 };
 
+const EventsHeader = ({navigation}) => {
+	return (
+		<AppHeader
+            title={'Events - Admin Panel'}
+            titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
+            headerBg={'blue'}
+            iconColor={'white'}
+            titleAlight={'center'}
+            back
+            backOnPress={() => navigation.pop()}
+          />
+	);
+};
+
+const BooksHeader = ({navigation}) => {
+	return (
+		<AppHeader
+            title={'Books - Admin Panel'}
+            titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
+            headerBg={'blue'}
+            iconColor={'white'}
+            titleAlight={'center'}
+            back
+            backOnPress={() => navigation.pop()}
+          />
+	);
+};
+
 export {
-	HomeHeader, ScreenHeader,
+	HomeHeader, ScreenHeader, EventsHeader, BooksHeader,
 };
 export default AppHeader;
