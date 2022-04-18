@@ -10,7 +10,7 @@ import Genres from '../screens/books/GenresCategories';
 import CallScreen from '../screens/events/CallScreen';
 import BooksListScreen from '../screens/books/BooksList';
 import GenreResults from '../screens/books/GenresResults';
-import SearchScreen from '../screens/books/SearchScreen';
+import SearchScreen from '../screens/search/SearchScreen';
 import CartScreen from '../screens/cart/Cart';
 import BookDetailScreen from '../screens/books/BookDetail';
 import EventsScreen from '../screens/events/EventsList';
