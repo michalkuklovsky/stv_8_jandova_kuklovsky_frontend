@@ -1,16 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {ActivityIndicator, StyleSheet, ScrollView, View, Image, Pressable, Text} from "react-native";
-import { Title, Subheading, Paragraph, TextInput } from "react-native-paper";
+import { Title, Subheading, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
-import {EventsHeader, ScreenHeader} from "../../components/Headers";
+import {ScreenHeader} from "../../components/Headers";
 
 const eventURL = appURL + 'events/'
 
 const EventDetailScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [event, setEvent] = useState({});
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
 
     useEffect(() => {
             fetch( eventURL + route.params.id, {
@@ -26,7 +24,7 @@ const EventDetailScreen = ({navigation, route}) => {
     return (
         <View style={styles.container}>
             <View>
-                <EventsHeader navigation={navigation} />
+                <ScreenHeader navigation={navigation} />
             </View>
             {isLoading ? <ActivityIndicator/> : (
             <View>
@@ -36,12 +34,7 @@ const EventDetailScreen = ({navigation, route}) => {
                             <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
                         </View>
                         <View style={styles.infoContainer}>
-                            <TextInput 
-                                onChangeText={description => setTitle(description)}
-                                mode="outlined"
-                                style={styles.infoTitle}
-                                value={event.name}
-                            />
+                            <Title style={styles.infoTitle}> {event.name} </Title>
                             <Subheading style={styles.infoSub}>User email: {event.user__email}</Subheading>
                             {/* <Paragraph style={styles.infoPar}> User email: {event.user__email} </Paragraph> */}
                         </View>
@@ -52,28 +45,9 @@ const EventDetailScreen = ({navigation, route}) => {
                             <Title>Description</Title>
                         </View>
                         <View style={styles.section} >
-                            <TextInput
-                                onChangeText={description => setDescription(description)}
-                                mode="outlined"
-                                style={styles.input}
-                                value={event.description}
-                            />
+                            <Paragraph> {event.description} </Paragraph>
                         </View>
                     </View>
-
-                    <View style={styles.btnView}>
-                        <View style={styles.btnContainer}>
-                            <Pressable style={styles.btn} onPress={() => {console.log('delete')}}>
-                                <Text style={styles.btnText}> Save changes </Text>
-                            </Pressable>
-                        </View>
-                        <View style={styles.btnContainer}>
-                            <Pressable style={styles.btn} onPress={() => {console.log('delete')}}>
-                                <Text style={styles.btnText}> Delete </Text>
-                            </Pressable>
-                        </View>
-                    </View>
-
                 </ScrollView>
             </View>
             )}
@@ -155,7 +129,7 @@ const styles = StyleSheet.create({
 
     infoTitle: {
         fontSize: 20,
-        paddingLeft: 6,
+        // paddingLeft: 0,
         marginTop: 8,
     },
     infoSub: {

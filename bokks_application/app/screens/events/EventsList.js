@@ -18,13 +18,15 @@ import { NavigationBar } from '../../navigator/Navigator';
 const eventsURL = appURL + 'events';
 
 const Event = ({navigation, event}) => {
-    const onPressed = () => {
-        navigation.navigate('EventDetail', {id: event.id});
+
+    const showDetail = () => {
+        navigation.navigate("EventInfo", {event: event});
     };
+
 
     return (
         // <View>
-        <Pressable onPress={onPressed}>
+        <Pressable onPress={showDetail}>
             <Card style={styles.card}>
                 <View style={styles.cardView}>
                     <View style={styles.imageContainer}>
@@ -41,7 +43,7 @@ const Event = ({navigation, event}) => {
     );
 };
 
-const EventsListScreen = ({navigation}) => {
+const EventsListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     // const [books, setBooks] = useState([]);
     const [events, setEvents] = useState([]);
@@ -57,7 +59,22 @@ const EventsListScreen = ({navigation}) => {
             })
             .catch(error => alert(error))
             .finally(() => setLoading(false));
-    }, []);
+    }, [route]);
+
+    // useEffect(function effectFunction() {
+    //     async function fetchEvents() {
+    //         const response = await fetch(eventsURL);
+    //         const json = await response.json();
+    //         setEvents(json.events);
+    //         setLoading(false);
+    //         // updateEvent(json.data);
+    //     }
+    //     fetchEvents();
+    // }, []);
+
+    const onPressed = () => {
+        navigation.navigate('EventDetail', {id: 19});
+    };
 
     return (
         <SafeAreaView>
@@ -69,6 +86,7 @@ const EventsListScreen = ({navigation}) => {
                         <EventsHeader navigation={navigation}/>
                     </View>
                     <View style={styles.mainContainer}>
+                        <Pressable onPress={onPressed}><Title style={styles.imgTitle}>Hello</Title></Pressable>
                         <FlatList
                             data={events}
                             keyExtractor={({id}, index) => id}
@@ -90,6 +108,7 @@ const EventsListScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     mainContainer:{
         paddingTop: 10,
+        // bottom: 50,
         // flexWrap: 'wrap',
     },
     titleContainer:{
