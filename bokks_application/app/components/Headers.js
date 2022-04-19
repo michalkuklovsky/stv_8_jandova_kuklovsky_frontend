@@ -36,7 +36,7 @@ const AppHeader = ({ style, menu, back, title, right, onRightPress, optionalBtn,
 	)
 	const TitleView = () => (
 		<View style={styles.titleView}>
-            {<TouchableOpacity onPress={backOnPress}>
+            {<TouchableOpacity onPress={titleOnPress}>
                 <Title style={{ color: iconColor, textAlign: titleAlight }}>{title}</Title>
 			</TouchableOpacity>}
 			{/* <Title style={{ color: iconColor, textAlign: titleAlight }}>{title}</Title> */}
@@ -82,12 +82,12 @@ const HomeHeader = ({navigation}) => {
 	return (
 		<AppHeader
               title={'BOKKS'}
-              titleOnPress={() => navigation.navigate('Home')}
+              titleOnPress={() => navigation.navigate('Home', {})}
               headerBg={'blue'}
               iconColor={'white'}
               titleAlight={'left'}
               right={'shopping-cart'}
-              onRightPress={() => navigation.navigate('Cart')}
+              onRightPress={() => navigation.navigate('Cart', {})}
             />
 	);
 };
@@ -101,7 +101,7 @@ const ScreenHeader = ({navigation}) => {
             iconColor={'white'}
             titleAlight={'center'}
             right={'shopping-cart'}
-            onRightPress={() => navigation.navigate('Cart')}
+            onRightPress={() => navigation.navigate('Cart', {})}
             back
             backOnPress={() => navigation.pop()}
           />
@@ -116,6 +116,8 @@ const EventsHeader = ({navigation}) => {
             headerBg={'blue'}
             iconColor={'white'}
             titleAlight={'center'}
+			right={'plus'}
+            onRightPress={() => navigation.navigate('CreateEvent', {})}
             back
             backOnPress={() => navigation.pop()}
           />
@@ -130,6 +132,8 @@ const BooksHeader = ({navigation}) => {
             headerBg={'blue'}
             iconColor={'white'}
             titleAlight={'center'}
+			right={'plus'}
+            onRightPress={() => navigation.navigate('CreateBook', {})}
             back
             backOnPress={() => navigation.pop()}
           />
