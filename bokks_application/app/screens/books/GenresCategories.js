@@ -13,7 +13,7 @@ import { HomeHeader } from '../../components/Headers';
 
 import {appURL} from "../../Constants";
 
-const genresURL = appURL + 'genres';
+const genresURL = appURL + 'genres/';
 
 const Genre = ({navigation, genre}) => {
   const onPressed = () => {
@@ -21,13 +21,15 @@ const Genre = ({navigation, genre}) => {
   }
 
   return (
+      <View style={styles.genreContainer}>
       <Pressable onPress={onPressed}>
-        <View style={styles.genreContainer}>
+
           <Text style={styles.sectionTitle} adjustsFontSizeToFit={true} numberOfLines={1}>
             {genre.name}
           </Text>
-        </View>
+
       </Pressable>
+      </View>
   )
 }
 
@@ -48,25 +50,25 @@ const Genres = ({navigation}) => {
   )
 
   return (
-      <SafeAreaView style={Colors.lighter} >
+      <View style={Colors.lighter} >
         {isLoading ? <ActivityIndicator/> : (
             <View>
               <HomeHeader navigation={navigation} />
               <View style={styles.mainTitleContainer}>
                 <Text style={styles.mainTitle}> Genres </Text>
               </View>
-                <FlatList
-                    data={data}
-                    keyExtractor={( {id}, index) => id}
-                    renderItem={renderItem}
-                    numColumns={2}
-                    styles={styles.listContainer}
-                    nestedScrollEnabled={true}
-                />
+              <FlatList
+                  data={data}
+                  keyExtractor={( {id}, index) => id}
+                  renderItem={renderItem}
+                  numColumns={2}
+                  styles={styles.listContainer}
+                  nestedScrollEnabled={true}
+              />
             </View>
         )
         }
-      </SafeAreaView>
+      </View>
   );
 };
 
