@@ -1,92 +1,56 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {appURL} from '../../Constants';
 
 const loginURL = appURL + 'login';
 const logoutURL = appURL + 'logout';
 
 
-export default function LoginScreen({navigation}) {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const data = {email: email, password: password};
-  const [user, setUser] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
+  // const [resStatus, setStatus] = useState(400);
+  // const [resData, setData] = useState({})
 
-  // const onLogin = async () => {
-  //     setLoading(true);
-  //     try {
-  //         await AsyncStorage.setItem('userId', userId);
-  //         setLoading(false);
-  //         props.navigation.push('Call');
-  //     } catch (err) {
-  //         console.log('Error', err);
-  //         setLoading(false);
-  //     }
-  // };
-
-  // const onLogin = () => {
-  //   setLoading(true);
-
-  //   fetch(loginURL, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then(response => response.json())
-  //     .then(response => console.log(response.data))
-  //     .catch(function (error) {
-  //       console.log(
-  //         'There has been a problem with your fetch operation: ' +
-  //           error.message,
-  //       );
-  //       // ADD THIS THROW error
-  //       // throw error;
-  //     })
-  //     .finally(setLoading(false));
-  // };
+  // toto by malo pouzit funkciu z AuthContext
+  // const {loading, login} = useContext(AuthContext);
 
   const onLogin = () => {
-    let tmpstatus;
     fetch(loginURL, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    })
-      .then(response => {
-        tmpstatus = response.status;
-        console.log('login: ' + response.status);
+    })  .then(response => {
+        console.log(response);
+          const resStatus = response.status;
+          const resData = response.json();
+          return Promise.all([resStatus, resData]);
+    })  .then( res => ( {resStatus: res[0], resData: res[1]}))
+        .then( (res) => {
+        if (res.resStatus === 204) {
+          console.log(res.resData.user);
+          // AsyncStorage.setItem('user', JSON.stringify(res.resData));
+          navigation.navigate('Home');
+        } else {
+          alert(res.resStatus + ': ' +res.resData.error.message);
+        }
       })
-      .then(navigation.navigate('Home'))
-      // .then(res => {
-      //   AsyncStorage.setItem('user', JSON.stringify(res.data));
-      //   setUser(res.data);
-      //   navigation.navigate('Homepage');
-      // })
       .catch(error => {
-        console.log(
-          'There has been a problem with your fetch operation: ' +
-            error.message,
-        );
+        console.log(error);
+        alert( 'There has been a problem with your fetch operation: \n' + error.message);
       })
-      .finally(() => {
-        setLoading(false);
+      .finally(() => { setLoading(false);
       });
-    // if (tmpstatus === 204) {
-    //   navigation.navigate('NavigationBar', {screen: 'Homepage'});
-    // }
   };
 
   const onLogout = ({navigation}) => {
-    let tmpstatus;
     fetch(logoutURL, {
       method: 'POST',
       headers: {
@@ -95,14 +59,13 @@ export default function LoginScreen({navigation}) {
       },
     })
       .then(response => {
-        tmpstatus = response.status;
-        console.log('logout: ' + response.status);
+        if (response.status === 204) {
+          AsyncStorage.removeItem('user');
+          navigation.navigate('Home');
+        } else ( alert(response.status));
       })
-      .catch(error => {
-        console.log(
-          'There has been a problem with your fetch operation: ' +
-            error.message,
-        );
+        .catch(error => {
+          alert( 'There has been a problem with your fetch operation: ' + error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -130,13 +93,12 @@ export default function LoginScreen({navigation}) {
 
         <Button
           mode="contained"
-          onPress={onLogin}
+          onPress={ onLogin }
           loading={loading}
           style={styles.btn}
           contentStyle={styles.btnContent}
-          // disabled={userId.length === 0}
         >
-          <Text>LOGIN</Text>
+          <Text>LOG IN</Text>
         </Button>
 
         <Button
@@ -188,3 +150,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+export default LoginScreen;
