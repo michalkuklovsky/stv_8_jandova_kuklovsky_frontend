@@ -6,27 +6,52 @@ import {ScreenHeader} from "../../components/Headers";
 import {NavigationBar} from "../../navigator/Navigator";
 
 const bookURL = appURL + 'books/'
-const cartURL = appURL + 'cart/add'
+const cartURL = appURL + 'cart/'
 
 const BookDetailScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [book, setBook] = useState({});
+    const [profile, setProfile] = useState({});
+
+    useEffect(() => {
+        fetch( appURL+'profile', {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(json => setProfile(json.user))
+            .catch(error => alert(error))
+            .then(setLoading(false));
+    }, [route]
+)
 
     const addToCart = () => {
-        console.log("add to cart pressed")
-        // useEffect(() => {
-        //         fetch( cartURL + book.id, {
-        //             method: 'POST',
-        //         })
-        //             .then(response => response.json())
-        //             .catch(error => alert(error))
-        //             .then(setLoading(false));
-        //     }, []
-        //
-        // )
+
+        if (profile === undefined) {
+            alert('You are not logged in');
+            navigation.navigate('NavBar', {screen: 'Login'});
+            return;
+        }
+
+            const data = {
+                'title': book.title,
+                'quantity': 1,
+                'price': book.price,
+            };
+
+            fetch( cartURL, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .catch(error => alert(error))
+                .then(setLoading(false));
     }
     const showDetail = () => {
-        navigation.navigate("BookInfo", {book: book})
+        navigation.navigate("BookInfo", {book: book});
     }
 
     useEffect(() => {
@@ -37,7 +62,7 @@ const BookDetailScreen = ({navigation, route}) => {
                 .then(json => setBook(json.book))
                 .catch(error => alert(error))
                 .then(setLoading(false));
-        }, []
+        }, [route]
     )
 
     return (
@@ -60,9 +85,9 @@ const BookDetailScreen = ({navigation, route}) => {
                                 <Pressable style={styles.btn} onPress={addToCart} >
                                     <Text style={styles.btnText}> Add to cart </Text>
                                 </Pressable>
-                                <Pressable style={styles.btn} onPress={showDetail} >
+                                {/* <Pressable style={styles.btn} onPress={showDetail} >
                                     <Text style={styles.btnText}> Detail </Text>
-                                </Pressable>
+                                </Pressable> */}
                             </View>
                         </View>
                     </View>
@@ -185,6 +210,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#a3c6ff",
         justifyContent: "center",
         elevation: 5,
+        top: 5,
     },
     btnText: {
         color: "black",

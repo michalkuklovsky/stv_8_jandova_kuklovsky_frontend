@@ -3,6 +3,7 @@ import {Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native
 import {Switch, Paragraph, Subheading, TextInput, Title} from "react-native-paper";
 import {BooksHeader, ScreenHeader} from "../../components/Headers";
 import { appURL } from "../../Constants";
+import ImagePicker from 'react-native-image-crop-picker';
 
 const BookInfo = ({navigation, route}) => {
     const book = route.params.book;
@@ -18,6 +19,7 @@ const BookInfo = ({navigation, route}) => {
     const [quantity, setQuantity] = useState('');
     const [description, setDescription] = useState('');
     const [genre, setGenre] = useState('');
+    const [image, setImage] = useState();
 
     const bookURL = appURL + 'books/' + route.params.book.id;
 
@@ -31,6 +33,7 @@ const BookInfo = ({navigation, route}) => {
         if (releaseYear !== '') {formdata.append('release_year', releaseYear); changed = true;}
         if (isbn !== '') {formdata.append('isbn', isbn); changed = true;}
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
+        if (image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (quantity !== '') {formdata.append('quantity', quantity); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
         if (genre !== '') {formdata.append('genres', genre); changed = true;}
@@ -55,6 +58,19 @@ const BookInfo = ({navigation, route}) => {
         navigation.navigate('BooksList', {});
     };
 
+    
+
+    const uploadImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+              setImage(image);
+            console.log(image);
+          });
+    };
+
     return (
         <View styles={styles.container}>
             {/* <View> */}
@@ -62,8 +78,8 @@ const BookInfo = ({navigation, route}) => {
             {/* </View> */}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
-            <Pressable tyle={styles.btn}>
+                <Image style={styles.img} source={{uri: appURL + 'books/' + book.id + '/' + book.img_path}} />
+            <Pressable style={styles.btn} onPress={uploadImage}>
                 <Text style={styles.btnText}> Upload </Text>
             </Pressable>
             </View>
@@ -105,6 +121,7 @@ const CreateBook = ({navigation, route}) => {
     const [quantity, setQuantity] = useState('');
     const [description, setDescription] = useState('');
     const [genre, setGenre] = useState('');
+    const [image, setImage] = useState();
 
     const bookURL = appURL + 'books/';
 
@@ -142,6 +159,17 @@ const CreateBook = ({navigation, route}) => {
         navigation.navigate('BooksList', {});
     };
 
+    const uploadImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+            setImage(image);
+            console.log(image);
+          });
+    };
+
     return (
         <View styles={styles.container}>
             {/* <View> */}
@@ -149,8 +177,8 @@ const CreateBook = ({navigation, route}) => {
             {/* </View> */}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
-            <Pressable tyle={styles.btn}>
+                <Image style={styles.img} source={{uri: image.path}} />
+            <Pressable tyle={styles.btn} onPress={uploadImage}>
                 <Text style={styles.btnText}> Upload </Text>
             </Pressable>
             </View>
@@ -231,6 +259,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#a3c6ff",
         justifyContent: "center",
         elevation: 5,
+        alignSelf: 'center'
     },
     btnText: {
         color: "black",
