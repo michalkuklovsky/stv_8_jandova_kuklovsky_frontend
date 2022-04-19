@@ -83,7 +83,7 @@ const HomeHeader = ({navigation}) => {
 		<AppHeader
               title={'BOKKS'}
               titleOnPress={() => navigation.navigate('Home', {})}
-              headerBg={'blue'}
+              headerBg={'#4a8fff'}
               iconColor={'white'}
               titleAlight={'left'}
               right={'shopping-cart'}
@@ -99,7 +99,7 @@ const ScreenHeader = ({navigation}) => {
 		<AppHeader
             title={'BOKKS'}
             titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
-            headerBg={'blue'}
+            headerBg={'#4a8fff'}
             iconColor={'white'}
             titleAlight={'center'}
             right={'shopping-cart'}
@@ -115,7 +115,7 @@ const EventsHeader = ({navigation}) => {
 		<AppHeader
             title={'Events - Admin Panel'}
             titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
-            headerBg={'blue'}
+            headerBg={'#4a8fff'}
             iconColor={'white'}
             titleAlight={'center'}
 			right={'plus'}
@@ -131,7 +131,7 @@ const BooksHeader = ({navigation}) => {
 		<AppHeader
             title={'Books - Admin Panel'}
             titleOnPress={() => navigation.navigate('NavBar', {screen: 'Home'})}
-            headerBg={'blue'}
+            headerBg={'#4a8fff'}
             iconColor={'white'}
             titleAlight={'center'}
 			right={'plus'}
