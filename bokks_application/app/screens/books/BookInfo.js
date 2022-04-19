@@ -33,7 +33,7 @@ const BookInfo = ({navigation, route}) => {
         if (releaseYear !== '') {formdata.append('release_year', releaseYear); changed = true;}
         if (isbn !== '') {formdata.append('isbn', isbn); changed = true;}
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
-        if (image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
+        if (image !== undefined && image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (quantity !== '') {formdata.append('quantity', quantity); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
         if (genre !== '') {formdata.append('genres', genre); changed = true;}
@@ -135,6 +135,7 @@ const CreateBook = ({navigation, route}) => {
         if (releaseYear !== '') {formdata.append('release_year', releaseYear); changed = true;}
         if (isbn !== '') {formdata.append('isbn', isbn); changed = true;}
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
+        if (image !== undefined && image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (quantity !== '') {formdata.append('quantity', quantity); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
         if (genre !== '') {formdata.append('genres', genre); changed = true;}
@@ -177,8 +178,8 @@ const CreateBook = ({navigation, route}) => {
             {/* </View> */}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri: image.path}} />
-            <Pressable tyle={styles.btn} onPress={uploadImage}>
+                <Image style={styles.img} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
+            <Pressable style={styles.btn} onPress={uploadImage}>
                 <Text style={styles.btnText}> Upload </Text>
             </Pressable>
             </View>

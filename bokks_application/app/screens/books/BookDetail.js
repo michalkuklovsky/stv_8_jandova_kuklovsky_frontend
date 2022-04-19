@@ -75,7 +75,7 @@ const BookDetailScreen = ({navigation, route}) => {
                 <ScrollView contentContainerStyle={styles.content}>
                     <View style={styles.card}>
                         <View style={styles.imageContainer}>
-                            <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
+                            <Image style={styles.img} source={{uri: appURL + 'books/' + book.id + '/' + book.img_path}} />
                         </View>
                         <View style={styles.infoContainer}>
                             <Title style={styles.infoTitle}> {book.title} </Title>
