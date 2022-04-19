@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -17,6 +17,9 @@ import EventsListScreen from '../screens/events/EventsList';
 import EventDetailScreen from '../screens/events/EventDetail';
 import EventInfo, { CreateEvent } from '../screens/events/EventInfo';
 import BookInfo, { CreateBook } from '../screens/books/BookInfo';
+import AccountScreen from "../screens/auth/AccountScreen";
+import AdminScreen from "../screens/auth/AdminScreen";
+
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
@@ -42,7 +45,11 @@ const Navigator = () => {
         <Stack.Screen name="EventInfo" component={EventInfo} />
         <Stack.Screen name="CreateEvent" component={CreateEvent} />
         <Stack.Screen name="CreateBook" component={CreateBook} />
-    </Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Account" component={AccountScreen} />
+        <Stack.Screen name="Admin" component={AdminScreen} />
+
+      </Stack.Navigator>
   );
 };
 
@@ -54,6 +61,7 @@ const search = 'Search';
 const Tab = createBottomTabNavigator();
 
 const NavigationBar = () => {
+
   return (
     <Tab.Navigator
       initialRouteName={homeName}
@@ -101,11 +109,12 @@ const NavigationBar = () => {
         component={Genres}
         options={{headerShown: false}}
       />
-        <Tab.Screen
+      <Tab.Screen
         name="Login"
         component={LoginScreen}
-        options={{headerShown: false}}
-        />
+        options={{headerShown: false }}
+      />
+
     </Tab.Navigator>
   );
 };
