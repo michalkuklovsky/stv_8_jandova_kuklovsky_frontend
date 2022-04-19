@@ -40,7 +40,7 @@ const GenreResults = ({navigation, route}) => {
               .then(json => setBooks(json.books))
               .catch(error => alert(error))
               .then(setLoading(false));
-        }, []
+        }, [route]
     )
     return (
         <SafeAreaView>
