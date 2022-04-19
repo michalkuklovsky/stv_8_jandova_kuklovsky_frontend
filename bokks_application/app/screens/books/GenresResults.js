@@ -3,11 +3,10 @@ import {ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, 
 import { Card, Title, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
 import { ScreenHeader } from '../../components/Headers';
-import base64 from 'react-native-base64';
 
 const genresURL = appURL + 'genres';
 
-const Book = ({navigation, book}) => {
+export const Book = ({navigation, book}) => {
     const onPressed = () => {
         navigation.navigate("BookDetail", {id: book.id})
     }
