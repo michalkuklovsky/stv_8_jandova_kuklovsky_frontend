@@ -1,20 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
+    View,
+    Text,
+    FlatList,
+    StyleSheet,
+    SafeAreaView,
+    ActivityIndicator, Pressable, Image,
 } from 'react-native';
-import {Button} from 'react-native-paper';
+import {Button, Card, Paragraph, Title} from 'react-native-paper';
 import AppHeader, { HomeHeader } from '../../components/Headers';
 import {appURL} from '../../Constants';
-
+import {Book} from "../books/GenresResults";
 
 const homeURL = appURL;
 
-const HomeScreen = ({navigation}) => {
+export const Event = ({navigation, event}) => {
+    const onPressed = () => {
+        navigation.navigate("EventDetail", {id: event.id})
+    }
+    return (
+        <Pressable onPress={onPressed}>
+            <Card style={styles.card}>
+                <View style={styles.imageContainer}>
+                    <Image style={styles.logo} source={{ uri: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80' }} />
+                </View>
+                <View style={styles.infoContainer}>
+                    <Title style={styles.imgTitle}> {event.name} </Title>
+                    <Paragraph style={styles.imgSub}> {event.description} </Paragraph>
+                </View>
+            </Card>
+        </Pressable>
+    )
+}
+
+const HomeScreen = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [books, setBooks] = useState([]);
   const [events, setEvents] = useState([]);
@@ -30,7 +49,10 @@ const HomeScreen = ({navigation}) => {
       })
       .catch(error => alert(error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [route]);
+    const onPressed = () => {
+        navigation.navigate("EventDetail", {id: event.id})
+    }
 
   return (
     <SafeAreaView>
@@ -41,263 +63,28 @@ const HomeScreen = ({navigation}) => {
           <View>
             <HomeHeader navigation={navigation} />
           </View>
-          <View style={StyleSheet.create({padding: 20})}>
-            <Text style={styles.mainText}>Books</Text>
+          <View style={{padding: 20}}>
+
+            <Title style={styles.mainText}>Most Popular Books</Title>
             <FlatList
               data={books}
               keyExtractor={({id}, index) => id}
-              renderItem={({item}, index) => (
-                <Text style={styles.mainText}>
-                  Title: {item.title}
-                  <Text> </Text>
-                  ISBN: {item.isbn}
-                </Text>
-              )}
+              renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
+              numColumns={2}
             />
-            {/* <Text style={styles.mainText}>Events</Text>
-            <FlatList
+
+            <Title style={styles.mainText}>Upcoming Events</Title>
+
+              <FlatList
               data={events}
               keyExtractor={({id}, index) => id}
-              renderItem={({item}, index) => (
-                <Text style={styles.mainText}>
-                  Title: {item.name}
-                  <Text> </Text>
-                  User ID: {item.user_id}
-                </Text>
-              )}
-            /> */}
-            <Button
-              title="Login"
-              color="white"
-              onPress={() =>
-                navigation.navigate('NavBar', {screen: 'Login'})
-              }
-              style={styles.btn}
-            >{'Login'}
-            </Button>
+              renderItem={({item}) => (<Event event={item} navigation={navigation} />)}
+            />
 
-            {/* <Button
-              title="BooksDetail"
-              color="white"
-              onPress={() =>
-                navigation.navigate('BooksDetail')
-              }
-              style={styles.btn}
-            >{'BooksDetail'}
-            </Button> */}
-
-            <Button
-              title="BooksList"
-              color="white"
-              onPress={() =>
-                navigation.navigate('BooksList')
-              }
-              style={styles.btn}
-            >{'BooksList'}
-            </Button>
-
-            <Button
-              title="EventsList"
-              color="white"
-              onPress={() =>
-                navigation.navigate('EventsList')
-              }
-              style={styles.btn}
-            >{'EventsList'}
-            </Button>
-
-            <Button
-              title="SeachScreen"
-              color="white"
-              onPress={() =>
-                navigation.navigate('SearchScreen')
-              }
-              style={styles.btn}
-            >{'SeachScreen'}
-            </Button>
-
-            {/* <Button
-              title="Cart"
-              color="white"
-              // onPress={() => navigation.navigate('Cart')}
-              style={styles.btn}
-            >{'Cart'}
-            </Button> */}
-
-            <Button
-              title="CallScreen"
-              color="white"
-              onPress={() =>
-                navigation.navigate('Call')
-              }
-              style={styles.btn}
-            >{'CallScreen'}
-            </Button>
-
-            {/* <Button
-              title="EventsDetails"
-              color="white"
-              onPress={() => navigation.navigate('EventsDetails')}
-              style={styles.btn}
-            >{'EventsDetails'}
-            </Button> */}
-
-            {/* <Button
-              title="Events"
-              color="white"
-              onPress={() => navigation.navigate('Events')}
-              style={styles.btn}
-            >{'Events'}
-            </Button> */}
-
-            <Button
-              title="Homepage"
-              color="white"
-              onPress={() =>
-                navigation.navigate('NavBar', {screen: 'Homepage'})
-              }
-              style={styles.btn}
-            >{'Homepage'}
-            </Button>
-
-            {/* <Button
-              title="SearchResults"
-              color="white"
-              onPress={() =>
-                navigation.navigate('SearchResults')
-              }
-              style={styles.btn}
-            >{'SearchResults'}
-            </Button> */}
-            {/* <TestButtons /> */}
           </View>
         </View>
     )}
     </SafeAreaView>
-  );
-};
-
-const TestButtons = ({navigation}) => {
-  return (
-    <View>
-      <Button
-        title="Login"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Login'})
-        }
-        style={styles.btn}
-      >{'Login'}
-      </Button>
-
-      <Button
-        title="BooksDetail"
-        color="white"
-        // onPress={() =>
-        //   navigation.navigate('BooksDetail')
-        // }
-        style={styles.btn}
-      >{'BooksDetail'}
-      </Button>
-
-      <Button
-        title="BooksList"
-        color="white"
-        onPress={() =>
-          navigation.navigate('BooksList')
-        }
-        style={styles.btn}
-      >{'BooksList'}
-      </Button>
-
-      <Button
-        title="GenresCategories"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'GenresCategories'}
-      </Button>
-
-      <Button
-        title="GenresResults"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'GenresResults'}
-      </Button>
-
-      <Button
-        title="SeachScreen"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'SeachScreen'}
-      </Button>
-
-      <Button
-        title="Cart"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'Cart'}
-      </Button>
-
-      <Button
-        title="CallScreen"
-        color="white"
-        onPress={() =>
-          navigation.navigate('Call')
-        }
-        style={styles.btn}
-      >{'CallScreen'}
-      </Button>
-
-      <Button
-        title="EventsDetails"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'EventsDetails'}
-      </Button>
-
-      <Button
-        title="Events"
-        color="white"
-        onPress={() => navigation.navigate('Call')}
-        style={styles.btn}
-      >{'Events'}
-      </Button>
-
-      <Button
-        title="Homepage"
-        color="white"
-        onPress={() =>
-          navigation.navigate('NavBar', {screen: 'Genres'})
-        }
-        style={styles.btn}
-      >{'Homepage'}
-      </Button>
-
-      <Button
-        title="SearchResults"
-        color="white"
-        // onPress={() =>
-        //   navigation.navigate('SearchResults')
-        // }
-        style={styles.btn}
-      >{'SearchResults'}
-      </Button>
-    </View>
   );
 };
 
@@ -312,8 +99,53 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   mainText: {
+    marginTop: 10,
     color: 'black',
   },
+  card: {
+    width: "90%",
+    flexDirection: "row",
+    height: 124,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    shadowOpacity: 0.25,
+    marginTop: 10,
+    marginBottom: 30,
+    alignSelf: "center"
+
+  },
+  infoContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignSelf: "flex-end",
+    paddingTop: 10,
+    paddingBottom: 8,
+  },
+  imageContainer: {
+    flex: 1,
+    position: "absolute",
+    flexDirection: "column",
+    alignSelf: "flex-start",
+    padding: 10,
+    height: "100%",
+  },
+  imgTitle: {
+    fontSize: 18,
+    padding: 4,
+    paddingRight: 14,
+    color: "black",
+    alignSelf: "flex-start"
+  },
+  logo: {
+    width: 100,
+    height: 110,
+    borderRadius: 10,
+  },
+  imgSub: {
+    paddingLeft: 6,
+      color: "black"
+  }
 });
 
 
