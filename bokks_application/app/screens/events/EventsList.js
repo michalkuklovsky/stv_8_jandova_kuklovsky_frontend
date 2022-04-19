@@ -145,18 +145,25 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         marginTop: 5,
         marginHorizontal: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     cardView: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     imgTitle: {
         fontSize: 16,
         paddingLeft: 6,
         width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     imgSub: {
         paddingLeft: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     btn: {
         backgroundColor: '#fff',
