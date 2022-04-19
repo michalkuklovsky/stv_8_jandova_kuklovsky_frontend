@@ -88,6 +88,8 @@ const HomeHeader = ({navigation}) => {
               titleAlight={'left'}
               right={'shopping-cart'}
               onRightPress={() => navigation.navigate('Cart', {})}
+			  optionalBtn={'user'}
+			  optionalBtnPress={() => navigation.navigate('Admin', {})}
             />
 	);
 };
