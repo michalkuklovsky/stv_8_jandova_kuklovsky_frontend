@@ -99,13 +99,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   mainText: {
-    marginTop: 10,
+    marginTop: 5,
     color: 'black',
   },
   card: {
-    width: "90%",
     flexDirection: "row",
-    height: 124,
+    height: 130,
+    width: "90%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -113,14 +113,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     alignSelf: "center"
-
   },
   infoContainer: {
     flex: 1,
     flexDirection: "column",
     alignSelf: "flex-end",
     paddingTop: 10,
-    paddingBottom: 8,
+    paddingBottom: 10,
   },
   imageContainer: {
     flex: 1,
