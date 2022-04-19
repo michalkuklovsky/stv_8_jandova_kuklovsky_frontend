@@ -107,16 +107,6 @@ const HomeScreen = ({navigation}) => {
             </Button>
 
             <Button
-              title="GenreResults"
-              color="white"
-              onPress={() =>
-                navigation.navigate('GenreResults')
-              }
-              style={styles.btn}
-            >{'GenreResults'}
-            </Button>
-
-            <Button
               title="SeachScreen"
               color="white"
               onPress={() =>
