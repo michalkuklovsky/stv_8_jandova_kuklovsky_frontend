@@ -1,8 +1,9 @@
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Pressable} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {appURL} from '../../Constants';
+import {HomeHeader} from "../../components/Headers";
 
 const loginURL = appURL + 'login';
 const logoutURL = appURL + 'logout';
@@ -12,12 +13,7 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const data = {email: email, password: password};
-  const [loading, setLoading] = useState('');
-  // const [resStatus, setStatus] = useState(400);
-  // const [resData, setData] = useState({})
-
-  // toto by malo pouzit funkciu z AuthContext
-  // const {loading, login} = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const onLogin = () => {
     fetch(loginURL, {
@@ -28,29 +24,23 @@ const LoginScreen = ({navigation}) => {
       },
       body: JSON.stringify(data),
     })  .then(response => {
-        console.log(response);
+        // console.log(response);
           const resStatus = response.status;
           const resData = response.json();
           return Promise.all([resStatus, resData]);
     })  .then( res => ( {resStatus: res[0], resData: res[1]}))
         .then( (res) => {
-        if (res.resStatus === 204) {
-          console.log(res.resData.user);
-          // AsyncStorage.setItem('user', JSON.stringify(res.resData));
-          navigation.navigate('Home');
+        if (res.resStatus === 200) {
+          navigation.navigate('Home', {});
         } else {
           alert(res.resStatus + ': ' +res.resData.error.message);
         }
       })
-      .catch(error => {
-        console.log(error);
-        alert( 'There has been a problem with your fetch operation: \n' + error.message);
-      })
-      .finally(() => { setLoading(false);
-      });
+      .catch(error => { alert(error);})
+      .finally(() => { setLoading(false);});
   };
 
-  const onLogout = ({navigation}) => {
+  const onLogout = () => {
     fetch(logoutURL, {
       method: 'POST',
       headers: {
@@ -61,7 +51,7 @@ const LoginScreen = ({navigation}) => {
       .then(response => {
         if (response.status === 204) {
           AsyncStorage.removeItem('user');
-          navigation.navigate('Home');
+          navigation.navigate('Home', {});
         } else ( alert(response.status));
       })
         .catch(error => {
@@ -74,7 +64,9 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.root}>
+      <HomeHeader navigation={navigation} />
       <View style={styles.content}>
+
         <Text style={styles.heading}>LOG IN</Text>
 
         <TextInput
@@ -91,26 +83,13 @@ const LoginScreen = ({navigation}) => {
           style={styles.input}
         />
 
-        <Button
-          mode="contained"
-          onPress={ onLogin }
-          loading={loading}
-          style={styles.btn}
-          contentStyle={styles.btnContent}
-        >
-          <Text>LOG IN</Text>
-        </Button>
+        <Pressable style={styles.btn} onPress={onLogin} >
+          <Text style={styles.btnText}> LOG IN </Text>
+        </Pressable>
+        <Pressable style={styles.btn} onPress={onLogout} >
+          <Text style={styles.btnText}> LOG OUT </Text>
+        </Pressable>
 
-        <Button
-          mode="contained"
-          onPress={onLogout}
-          loading={loading}
-          style={styles.btn}
-          contentStyle={styles.btnContent}
-          // disabled={userId.length === 0}
-        >
-          <Text>LOGOUT</Text>
-        </Button>
       </View>
     </View>
   );
@@ -120,34 +99,37 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: '#fff',
     flex: 1,
-    // alignItems: 'center',
-    justifyContent: 'center',
   },
   content: {
-    // alignSelf: 'center',
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   heading: {
     fontSize: 18,
-    marginBottom: 10,
+    marginTop: 200,
+    marginBottom: 20,
     fontWeight: '600',
   },
   input: {
     height: 60,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   btn: {
-    height: 60,
-    borderRadius: 25,
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    fontSize: 18,
-  },
-  btnContent: {
+    width: 200,
+    height: 50,
+    marginTop: 20,
+    borderRadius: 10,
+    backgroundColor: "#a3c6ff",
+    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
+    elevation: 5,
+  },
+  btnText: {
+    color: "black",
+    textAlign: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
