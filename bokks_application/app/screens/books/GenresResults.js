@@ -17,8 +17,7 @@ const Book = ({navigation, book}) => {
         <Pressable onPress={onPressed}>
             <Card style={styles.card}>
                 <View style={styles.imageContainer}>
-                    <Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
-                    {/*    /!*<Card.Cover style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />*!/*/}
+                    <Image style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />
                 </View>
                 <Title style={styles.imgTitle}> {book.title} </Title>
                 <Paragraph style={styles.imgSub}> {book.price} € </Paragraph>
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: 100,
-        height: 120,
+        height: 140,
         borderRadius: 10,
     },
     imageContainer: {
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     },
     card: {
         width: 140,
-        height: 220,
+        // height: 240,
         borderRadius: 10,
         shadowOpacity: 0.25,
         marginVertical: 10,
