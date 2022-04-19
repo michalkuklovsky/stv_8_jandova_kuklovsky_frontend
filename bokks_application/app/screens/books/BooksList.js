@@ -6,21 +6,47 @@ import {
     StyleSheet,
     SafeAreaView,
     ActivityIndicator,
+    Pressable,
+    Image,
 } from 'react-native';
-import {Button} from 'react-native-paper';
-import {appURL} from "../../Constants";
+import { Card, Title, Paragraph } from 'react-native-paper';
+import { BooksHeader} from '../../components/Headers';
+import {appURL} from '../../Constants';
+import { NavigationBar } from '../../navigator/Navigator';
 
 
 const booksURL = appURL + 'books';
 
-const Book = () => {
+const Book = ({navigation, book}) => {
 
-}
+    const showDetail = () => {
+        navigation.navigate("BookInfo", {book: book});
+    };
 
-const BooksListScreen = ({navigation}) => {
+
+    return (
+        // <View>
+        <Pressable onPress={showDetail}>
+            <Card style={styles.card}>
+                <View style={styles.cardView}>
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
+                        {/*    /!*<Card.Cover style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />*!/*/}
+
+                    </View>
+                    <Title style={styles.imgTitle}> {book.title} </Title>
+                    <Paragraph style={styles.imgSub}> Quantity: {book.quantity}</Paragraph>
+                </View>
+            </Card>
+        </Pressable>
+        // </View>
+    );
+};
+
+const BooksListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
-    const [events, setEvents] = useState([]);
+    // const [events, setEvents] = useState([]);
 
     useEffect(() => {
         fetch(booksURL, {
@@ -29,12 +55,15 @@ const BooksListScreen = ({navigation}) => {
             .then(response => response.json())
             .then(json => {
                 setBooks(json.books);
-                setEvents(json.events);
-                navigation.navigate();
+                // navigation.navigate();
             })
             .catch(error => alert(error))
             .finally(() => setLoading(false));
-    }, []);
+    }, [route]);
+
+    const onPressed = () => {
+        navigation.navigate('EventDetail', {id: 19});
+    };
 
     return (
         <SafeAreaView>
@@ -42,18 +71,22 @@ const BooksListScreen = ({navigation}) => {
                 <ActivityIndicator />
             ) : (
                 <View>
-                    <Text>Books</Text>
-                    <FlatList
-                        data={books}
-                        keyExtractor={({id}, index) => id}
-                        renderItem={({item}, index) => (
-                            <Text>
-                                Title: {item.title}
-                                <Text> </Text>
-                                ISBN: {item.isbn}
-                            </Text>
-                        )}
-                    />
+                    <View>
+                        <BooksHeader navigation={navigation}/>
+                    </View>
+                    <View style={styles.mainContainer}>
+                        <FlatList
+                            data={books}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
+                            styles={styles.booksList}
+                            contentContainerStyle={styles.listContainer}
+                            nestedScrollEnabled={true}
+                        />
+                    </View>
+                    <View style={styles.navbar}>
+                        <NavigationBar />
+                    </View>
                 </View>
             )}
         </SafeAreaView>
@@ -61,6 +94,58 @@ const BooksListScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+    mainContainer:{
+        paddingTop: 10,
+        // bottom: 50,
+        // flexWrap: 'wrap',
+    },
+    titleContainer:{
+        padding: 8,
+    },
+    mainTitle: {
+        fontSize: 24,
+        fontWeight: '500',
+        textAlign: 'center',
+        color: 'black',
+    },
+    booksList: {
+        flexGrow: 1,
+        backgroundColor: 'blue',
+    },
+    listContainer: {
+        marginHorizontal: 8,
+    },
+    logo: {
+        width: 20,
+        height: 30,
+        borderRadius: 10,
+    },
+    imageContainer: {
+        paddingTop: 10,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    card: {
+        // width: 140,
+        height: 50,
+        borderRadius: 10,
+        shadowOpacity: 0.25,
+        marginTop: 5,
+        marginHorizontal: 20,
+    },
+    cardView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    imgTitle: {
+        fontSize: 14,
+        paddingLeft: 6,
+        width: '50%',
+    },
+    imgSub: {
+        paddingLeft: 6,
+    },
     btn: {
         backgroundColor: '#fff',
         height: 60,
@@ -68,6 +153,10 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center',
         fontSize: 18,
+    },
+    navbar: {
+        position: 'absolute',
+        bottom: 0,
     },
 });
 
