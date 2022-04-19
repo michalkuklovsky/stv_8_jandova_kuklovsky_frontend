@@ -132,7 +132,6 @@ const CreateBook = ({navigation, route}) => {
                 })
                 .then(response => {
                     console.log(bookURL + " -> HTTP POST sent");
-                    console.log(response.json.error);
                 })
                 .catch(err => {
                     console.log(err);
