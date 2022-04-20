@@ -11,8 +11,6 @@ import {
 } from 'react-native';import AppHeader, { ScreenHeader } from '../../components/Headers';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import {appURL} from '../../Constants';
-// import Navigator from '../../navigator/Navigator';
-import {NavigationBar } from '../../navigator/Navigator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -21,9 +19,6 @@ const orderURL = appURL + 'orders/';
 
 const CartItem = ({navigation, item}) => {
 
-    // const showDetail = () => {
-    //     navigation.navigate("EventInfo", {item: item});
-    // };
     const deleteItem = () => {
         fetch( cartURL + '/' + item.title, {
             method: 'DELETE',
@@ -51,7 +46,7 @@ const CartItem = ({navigation, item}) => {
 };
 
 const getTotalSum = (cart) => {
-    var temp_sum = 0;
+    let temp_sum = 0;
     for (let i = 0; i < cart.length; i++){
         console.log(cart[i]['price']);
         temp_sum += cart[i]['price'] * cart[i]['quantity'];
@@ -73,8 +68,6 @@ const CartScreen = ({navigation, route}) => {
             .then(response => response.json())
             .then(json => {
                 setCart(json.cart);
-                // setSum(getTotalSum(cart));
-                // navigation.navigate();
             })
             .catch(error => alert(error))
             .finally(() => {
@@ -86,8 +79,7 @@ const CartScreen = ({navigation, route}) => {
     const checkout = () => {
 
         if (cart === undefined || cart.length === 0) {
-            alert('Cart is empty');
-            return;
+            alert('Cart is empty. Please add books first.');
         }
 
         let formdata = new FormData();
@@ -106,7 +98,6 @@ const CartScreen = ({navigation, route}) => {
           .catch(error => alert(error))
           .finally(navigation.navigate('Cart', {}));
     };
-    // setSum(getTotalSum(cart));
 
     return (
         <SafeAreaView>
@@ -134,14 +125,14 @@ const CartScreen = ({navigation, route}) => {
                         <Title style={styles.price}>Total price</Title>
                         <Title style={styles.price}> {total_sum.toFixed(2)} € </Title>
                     </View>
-                    <Button 
+                    <Button
                         onPress={checkout}
                         style={styles.btn}
                         contentStyle={styles.btnContent}
                     >
                         <Text style={styles.text}>Procceed to checkout</Text>
                     </Button>
-                    
+
                     {/* <View style={styles.navbar}>
                         <NavigationBar />
                     </View> */}
@@ -230,7 +221,7 @@ const styles = StyleSheet.create({
         width: '23%',
     },
     btn: {
-        backgroundColor: 'blue',
+        backgroundColor: '#4a8fff',
         height: 60,
         borderRadius: 25,
         alignItems: 'stretch',
@@ -240,9 +231,7 @@ const styles = StyleSheet.create({
         width: 300,
         alignSelf: 'center'
     },
-    // navbar: {
-    //     top: 228,
-    // },
+
     line: {
         borderBottomColor: 'black',
         borderBottomWidth: 1,
