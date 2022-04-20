@@ -30,9 +30,7 @@ const Book = ({navigation, book}) => {
             <Card style={styles.card}>
                 <View style={styles.cardView}>
                     <View style={styles.imageContainer}>
-                        <Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
-                        {/*    /!*<Card.Cover style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />*!/*/}
-
+                        <Image style={styles.logo} source={{uri: booksURL+'/'+book.id+'/'+book.img_path}} />
                     </View>
                     <Title style={styles.imgTitle}> {book.title} </Title>
                     <Paragraph style={styles.imgSub}> Quantity: {book.quantity}</Paragraph>
@@ -116,18 +114,16 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     logo: {
-        width: 20,
-        height: 30,
-        borderRadius: 10,
+        width: 28,
+        height: 40,
+        borderRadius: 5,
+        backgroundColor: '#a3c6ff',
     },
     imageContainer: {
-        paddingTop: 10,
-        paddingBottom: 5,
+        padding: 5,
         paddingLeft: 10,
-        paddingRight: 10,
     },
     card: {
-        // width: 140,
         height: 50,
         borderRadius: 10,
         shadowOpacity: 0.25,

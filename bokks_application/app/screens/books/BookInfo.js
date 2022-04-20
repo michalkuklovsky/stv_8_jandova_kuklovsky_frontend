@@ -58,7 +58,7 @@ const BookInfo = ({navigation, route}) => {
         navigation.navigate('BooksList', {});
     };
 
-    
+
 
     const uploadImage = () => {
         ImagePicker.openPicker({
@@ -67,7 +67,6 @@ const BookInfo = ({navigation, route}) => {
             cropping: true
           }).then(image => {
               setImage(image);
-            console.log(image);
           });
     };
 

@@ -49,10 +49,12 @@ const EventInfo = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
-            <Pressable tyle={styles.btn}>
-                <Text style={styles.btnText}> Upload </Text>
-            </Pressable>
+                {/*<Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} />*/}
+                <Image style={styles.img} source={{ uri: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80' }} />
+
+                <Pressable style={styles.btn}>
+                    <Text style={styles.btnText}> Upload </Text>
+                </Pressable>
             </View>
             <View style={styles.infoContainer}>
                 <TextInput
@@ -130,10 +132,10 @@ const CreateEvent = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
-            <Pressable tyle={styles.btn}>
-                <Text style={styles.btnText}> Upload </Text>
-            </Pressable>
+                <Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} />
+                <Pressable style={styles.btn} >
+                    <Text style={styles.btnText}> Upload </Text>
+                </Pressable>
             </View>
             <View style={styles.infoContainer}>
                 <TextInput
@@ -190,7 +192,8 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderRadius: 10,
         height: 200,
-        width: 140,
+        width: 180,
+        backgroundColor: '#a3c6ff',
     },
     imageContainer: {
         // flexDirection: "row",
@@ -215,6 +218,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#a3c6ff",
         justifyContent: "center",
         elevation: 5,
+        alignSelf: 'center'
     },
     btnText: {
         color: "black",

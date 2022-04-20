@@ -12,7 +12,6 @@ import {
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { EventsHeader} from '../../components/Headers';
 import {appURL} from '../../Constants';
-import { NavigationBar } from '../../navigator/Navigator';
 
 
 const eventsURL = appURL + 'events';
@@ -22,30 +21,23 @@ const Event = ({navigation, event}) => {
     const showDetail = () => {
         navigation.navigate("EventInfo", {event: event});
     };
-
-
     return (
-        // <View>
         <Pressable onPress={showDetail}>
             <Card style={styles.card}>
                 <View style={styles.cardView}>
                     <View style={styles.imageContainer}>
-                        <Image style={styles.logo} source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}} />
-                        {/*    /!*<Card.Cover style={styles.logo} source={{ uri: appURL+'books/'+book.id+'/'+book.img_path }} />*!/*/}
-
+                        <Image style={styles.logo} source={{ uri: eventsURL+'/'+event.id+'/'+event.img_path }} />
                     </View>
                     <Title style={styles.imgTitle}> {event.name} </Title>
                     <Paragraph style={styles.imgSub}> User ID: {event.user__id}</Paragraph>
                 </View>
             </Card>
         </Pressable>
-        // </View>
     );
 };
 
 const EventsListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
-    // const [books, setBooks] = useState([]);
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -61,21 +53,6 @@ const EventsListScreen = ({navigation, route}) => {
             .finally(() => setLoading(false));
     }, [route]);
 
-    // useEffect(function effectFunction() {
-    //     async function fetchEvents() {
-    //         const response = await fetch(eventsURL);
-    //         const json = await response.json();
-    //         setEvents(json.events);
-    //         setLoading(false);
-    //         // updateEvent(json.data);
-    //     }
-    //     fetchEvents();
-    // }, []);
-
-    const onPressed = () => {
-        navigation.navigate('EventDetail', {id: 19});
-    };
-
     return (
         <SafeAreaView>
             {isLoading ? (
@@ -86,7 +63,6 @@ const EventsListScreen = ({navigation, route}) => {
                         <EventsHeader navigation={navigation}/>
                     </View>
                     <View style={styles.mainContainer}>
-                        <Pressable onPress={onPressed}><Title style={styles.imgTitle}>Hello</Title></Pressable>
                         <FlatList
                             data={events}
                             keyExtractor={({id}, index) => id}
@@ -96,9 +72,6 @@ const EventsListScreen = ({navigation, route}) => {
                             nestedScrollEnabled={true}
                         />
                     </View>
-                    <View style={styles.navbar}>
-                        <NavigationBar />
-                    </View>
                 </View>
             )}
         </SafeAreaView>
@@ -107,9 +80,7 @@ const EventsListScreen = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
     mainContainer:{
-        paddingTop: 10,
-        // bottom: 50,
-        // flexWrap: 'wrap',
+        paddingTop: 20,
     },
     titleContainer:{
         padding: 8,
@@ -128,18 +99,15 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     logo: {
-        width: 20,
-        height: 30,
-        borderRadius: 10,
+        width: 32,
+        height: 38,
+        borderRadius: 5,
+        backgroundColor: '#a3c6ff',
     },
     imageContainer: {
-        paddingTop: 10,
-        paddingBottom: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
+        padding: 5,
     },
     card: {
-        // width: 140,
         height: 50,
         borderRadius: 10,
         shadowOpacity: 0.25,

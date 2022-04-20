@@ -31,12 +31,11 @@ const EventDetailScreen = ({navigation, route}) => {
                 <ScrollView style={styles.content}>
                     <View style={styles.card}>
                         <View style={styles.imageContainer}>
-                            <Image style={styles.img} source={{uri: 'https://www.psdmockups.com/wp-content/uploads/2018/06/Hardback-Book-Front-Cover-PSD-Mockup.jpg'}} />
+                            <Image style={styles.logo} source={{ uri: eventURL+'/'+event.id+'/'+event.img_path }} />
                         </View>
                         <View style={styles.infoContainer}>
                             <Title style={styles.infoTitle}> {event.name} </Title>
                             <Subheading style={styles.infoSub}>User email: {event.user__email}</Subheading>
-                            {/* <Paragraph style={styles.infoPar}> User email: {event.user__email} </Paragraph> */}
                         </View>
                     </View>
 
@@ -125,6 +124,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: 200,
         width: "100%",
+        backgroundColor: '#a3c6ff',
+
     },
 
     infoTitle: {
