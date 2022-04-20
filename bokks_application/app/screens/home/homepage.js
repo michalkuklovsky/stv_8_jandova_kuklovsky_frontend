@@ -50,10 +50,7 @@ const HomeScreen = ({navigation, route}) => {
       .catch(error => alert(error))
       .finally(() => setLoading(false));
   }, [route]);
-    const onPressed = () => {
-        navigation.navigate("EventDetail", {id: event.id})
-    }
-
+    
   return (
     <SafeAreaView>
       {isLoading ? (
