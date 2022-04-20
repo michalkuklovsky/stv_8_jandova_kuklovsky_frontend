@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {ActivityIndicator, Image, Pressable, ScrollView, Text, View} from "react-native";
 import {StyleSheet} from "react-native";
-import {Button} from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {ScreenHeader} from "../../components/Headers";
 import {appURL} from "../../Constants";
 

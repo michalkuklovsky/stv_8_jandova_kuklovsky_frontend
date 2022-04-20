@@ -1,7 +1,6 @@
 // prevzate z https://github.com/vishalpwr/react-native/blob/master/Header/AppHeader.js
 // prisposobene pre potreby aplikacie
 
-import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Surface, Title } from 'react-native-paper';
