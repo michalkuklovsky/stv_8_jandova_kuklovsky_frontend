@@ -85,7 +85,7 @@ const CartScreen = ({navigation, route}) => {
 
     const checkout = () => {
 
-        if (cart.length === 0) {
+        if (cart === undefined || cart.length === 0) {
             alert('Cart is empty');
             return;
         }

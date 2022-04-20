@@ -1,46 +1,59 @@
 import React, {useState} from 'react';
-import { Searchbar } from 'react-native-paper';
+import { Searchbar, TextInput } from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
 import { List } from 'react-native-paper';
 
-const MyComponent = () => {
+const Dropdown = ({title, first, second, bool}) => {
     const [expanded, setExpanded] = React.useState(true);
   
     const handlePress = () => setExpanded(!expanded);
   
     return (
-      <List.Section title="Accordions">
         <List.Accordion
-          title="Uncontrolled Accordion"
-          left={props => <List.Icon {...props} icon="folder" />}>
-          <List.Item title="First item" />
-          <List.Item title="Second item" />
-        </List.Accordion>
-  
-        <List.Accordion
-          title="Controlled Accordion"
-          left={props => <List.Icon {...props} icon="folder" />}
+          title={title}
+        //   left={props => <List.Icon {...props} icon="folder" />}
           expanded={expanded}
           onPress={handlePress}>
-          <List.Item title="First item" />
-          <List.Item title="Second item" />
+          <List.Item title={first} />
+          <List.Item title={second}/>
         </List.Accordion>
-      </List.Section>
     );
   };
 
 const SearchScreen = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [filter, setFilter] = useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
-        <Searchbar
-            placeholder="Search"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            style={styles.search}
-        />
+        <View>
+            <View style={styles.searchView}>
+                <Searchbar
+                placeholder="Search"
+                onChangeText={onChangeSearch}
+                value={searchQuery}
+                style={styles.search}
+            />
+            </View>
+            <View style={styles.dropdownView}>
+                <View style={styles.filterView}>
+                    <Dropdown title={'Filter by'} first={'author'} second={'genre'}/>
+                </View>
+                <View style={styles.filterView}>
+                    <Dropdown title={'Order by'} first={'price'} second={'release_year'}/>
+                </View>
+            </View>
+            <View style={styles.dropdownView}>
+                <View style={styles.filterView}>
+                    <TextInput label={'Filter'} onChangeText={text => setFilter(text)}/>
+                </View>
+                <View style={styles.filterView}>
+                    <Dropdown title={'Order type'} first={'ascending'} second={'descending'}/>
+                </View>
+            </View>
+            
+        </View>
     );
 };
 
@@ -48,6 +61,20 @@ const styles = StyleSheet.create({
     search: {
         top: 20,
         marginHorizontal: 10,
+        // paddingBottom: 10,
+    },
+    searchView: {
+        paddingBottom: 40,
+    },
+    dropdownView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'space-around',
+    },
+    filterView: {
+        width: '45%',
+        // margin: 5,
     },
     root: {
       backgroundColor: '#fff',
