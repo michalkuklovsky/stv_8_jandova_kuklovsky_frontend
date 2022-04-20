@@ -11,6 +11,7 @@ import CallScreen from '../screens/events/CallScreen';
 import BooksListScreen from '../screens/books/BooksList';
 import GenreResults from '../screens/books/GenresResults';
 import SearchScreen from '../screens/search/SearchScreen';
+import SearchResults from '../screens/search/SearchResults';
 import CartScreen from '../screens/cart/Cart';
 import BookDetailScreen from '../screens/books/BookDetail';
 import EventsListScreen from '../screens/events/EventsList';
@@ -37,6 +38,7 @@ const Navigator = () => {
         <Stack.Screen name="BooksList" component={BooksListScreen} />
         <Stack.Screen name="GenreResults" component={GenreResults} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen name="SearchResults" component={SearchResults} />
         <Stack.Screen name="Cart" component={CartScreen} />
         <Stack.Screen name="BookDetail" component={BookDetailScreen} />
         <Stack.Screen name="EventsList" component={EventsListScreen} />
@@ -81,7 +83,7 @@ const NavigationBar = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#006BFF',
+        tabBarActiveTintColor: '#4a8fff',
         tabBarInactiveTintColor: 'grey',
         tabBarLabelStyle: {
           paddingBottom: 10,

@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     },
     imgSub: {
         paddingLeft: 6,
-    }
-})
+    },
+});
 
 export default GenreResults;
