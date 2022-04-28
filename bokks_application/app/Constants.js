@@ -1,5 +1,5 @@
-// export const appURL = 'http://147.175.182.110:8000/';
-export const appURL = 'http://10.62.44.90:8000/';
+export const appURL = 'http://192.168.200.185:8000/';
+// export const appURL = 'http://10.62.44.90:8000/';
 // export const appURL = 'http://192.168.1.20:8000/';
 // export const appURL = 'http://192.168.1.10:8000/';
 
