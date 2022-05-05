@@ -1,10 +1,11 @@
 // prevzate z https://github.com/vishalpwr/react-native/blob/master/Header/AppHeader.js
 // prisposobene pre potreby aplikacie
 
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Surface, Title } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
+import {AuthContext} from "../context/AuthContext";
 
 const IconSize = 24;
 
@@ -78,6 +79,8 @@ const styles = StyleSheet.create({
 });
 
 const HomeHeader = ({navigation}) => {
+	const {role} = useContext(AuthContext);
+
 	return (
 		<AppHeader
               title={'BOKKS'}
@@ -88,7 +91,14 @@ const HomeHeader = ({navigation}) => {
               right={'shopping-cart'}
               onRightPress={() => navigation.navigate('Cart', {})}
 			  optionalBtn={'user'}
-			  optionalBtnPress={() => navigation.navigate('Admin', {})}
+			  optionalBtnPress={ () => { role === "admin" ? (
+				  navigation.navigate('Admin', {})
+			  ) : (
+				  navigation.navigate('Account', {})
+
+			  )
+			  }
+		}
             />
 	);
 };

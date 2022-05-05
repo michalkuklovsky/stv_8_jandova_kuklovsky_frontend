@@ -4,6 +4,8 @@ import {Text, TextInput, Button} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {appURL} from '../../Constants';
 import {HomeHeader} from "../../components/Headers";
+// import {storeUser, removeUser, getUser} from "../../StorageController";
+import { AuthContext } from '../../context/AuthContext';
 
 const loginURL = appURL + 'login';
 const logoutURL = appURL + 'logout';
@@ -14,6 +16,7 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const data = {email: email, password: password};
   const [loading, setLoading] = useState(false);
+  const {storeUser, removeUser} = useContext(AuthContext);
 
   const onLogin = () => {
     fetch(loginURL, {
@@ -31,9 +34,11 @@ const LoginScreen = ({navigation}) => {
     })  .then( res => ( {resStatus: res[0], resData: res[1]}))
         .then( (res) => {
         if (res.resStatus === 200) {
+          // console.log(res.resData.user.email, res.resData.user.is_admin);
+          storeUser(res.resData.user.email, res.resData.user.is_admin);
           navigation.navigate('Home', {});
         } else {
-          alert(res.resStatus + ': ' +res.resData.error.message);
+          alert(res.resData.error.message);
         }
       })
       .catch(error => { alert(error);})
@@ -50,7 +55,7 @@ const LoginScreen = ({navigation}) => {
     })
       .then(response => {
         if (response.status === 204) {
-          AsyncStorage.removeItem('user');
+          removeUser();
           navigation.navigate('Home', {});
         } else ( alert(response.status));
       })

@@ -1,32 +1,71 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {ActivityIndicator, Image, Pressable, ScrollView, Text, View} from "react-native";
 import {StyleSheet} from "react-native";
 import {ScreenHeader} from "../../components/Headers";
 import {appURL} from "../../Constants";
+// import {getUser} from "../../StorageController";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from '../../context/AuthContext';
 
 const profileURL = appURL + 'profile';
 const logoutURL = appURL + 'logout';
 
 const AdminScreen = ({navigation, route}) => {
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState({});
+    const [logout, setLogout] = useState(false);
+    const {role, getUser, removeUser} = useContext(AuthContext);
 
-    useEffect(() => {
-        fetch(profileURL, {
-            method: 'GET'
-        })
-            .then( response => response.json())
-            .then( json => {
-                setUser(json.user);
-                if (json.user === undefined) {
-                    throw "Unauthorized user. Please log in."
-                } else if (!json.user.is_admin) {
-                    throw "Forbidden."
-                }
-            })
-            .catch(error => {  alert( error ); return navigation.navigate("Home", {}) })
-            .finally(setLoading(false))
-    }, [route]);
+    useEffect( () => {
+
+        // getUser()
+        //     .then(
+        //     if (role === "unknown") {
+        //         alert("Unauthorized user. Please log in.");
+        //         return navigation.navigate("Home", {});
+        //     } else if (role === "user") {
+        //         alert("Forbidden.");
+        //         return navigation.navigate("Home", {});
+        // })
+        // .finally(setLoading(false));
+       let unmounted = false
+       getUser();
+        if (role === "unknown") {
+            alert("Unauthorized user. Please log in.");
+            return navigation.navigate("Home", {});
+        } else if (role === "user") {
+            alert("Forbidden.");
+            return navigation.navigate("Home", {});
+        }
+        setLoading(false);
+        return () => {
+            unmounted = true
+        }
+
+
+    }, [logout])
+
+
+    // useEffect(() => {
+    //     fetch(profileURL, {
+    //         method: 'GET'
+    //     })
+    //         .then( response => response.json())
+    //         .then( json => {
+    //             // setUser(json.user);
+    //             setUser(getUser());
+    //             console.log(user);
+    //             // if (json.user === undefined) {
+    //             if (user === undefined) {
+    //                 throw "Unauthorized user. Please log in."
+    //             // } else if (!json.user.is_admin) {
+    //             } else if (!user.is_admin) {
+    //
+    //                 throw "Forbidden."
+    //             }
+    //         })
+    //         .catch(error => {  alert( error ); return navigation.navigate("Home", {}) })
+    //         .finally(setLoading(false))
+    // }, [route]);
 
     const onLogout = () => {
         setLoading(true);
@@ -35,10 +74,12 @@ const AdminScreen = ({navigation, route}) => {
         })
             .then(response => {
                 if (response.status === 204) {
+                    removeUser();
+                    setLogout(true);
                     navigation.navigate('Home', {});
                 } else ( alert(response.status));
             })
-            .catch(error => { alert(error);})
+            .catch(error => { alert(error.message);})
             .finally(() => {
                 setLoading(false);
             });
@@ -55,7 +96,7 @@ const AdminScreen = ({navigation, route}) => {
                     <View style={styles.container}>
                         <View style={styles.card}>
                             <Image style={styles.avatar} source={{uri: "https://logodix.com/logo/1707088.png"}} />
-                            <Text style={styles.cardTittle}> Admin </Text>
+                            <Text style={styles.cardTittle}> {role} </Text>
                         </View>
 
                         <View style={styles.card}>

@@ -25,6 +25,7 @@ const Navigator = () => {
   const Stack = createNativeStackNavigator();
 
   return (
+
       <Stack.Navigator
           initialRouteName="Homepage"
           screenOptions={{
@@ -48,9 +49,9 @@ const Navigator = () => {
         <Stack.Screen name="CreateEvent" component={CreateEvent} />
         <Stack.Screen name="CreateBook" component={CreateBook} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Account" component={AccountScreen} />
-        <Stack.Screen name="Admin" component={AdminScreen} />
 
+        <Stack.Screen name="Admin" component={AdminScreen} />
+        <Stack.Screen name="Account" component={AccountScreen} />
       </Stack.Navigator>
   );
 };
