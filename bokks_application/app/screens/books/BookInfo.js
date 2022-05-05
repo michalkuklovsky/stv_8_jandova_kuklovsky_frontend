@@ -19,7 +19,7 @@ const BookInfo = ({navigation, route}) => {
     const [quantity, setQuantity] = useState('');
     const [description, setDescription] = useState('');
     const [genre, setGenre] = useState('');
-    const [image, setImage] = useState();
+    const [image, setImage] = useState(undefined);
 
     const bookURL = appURL + 'books/' + route.params.book.id;
 
@@ -48,6 +48,7 @@ const BookInfo = ({navigation, route}) => {
                 })
                 .then(response => {
                     console.log(bookURL + " -> HTTP PUT sent");
+                    // console.log(response.json());
                 })
                 .catch(err => {
                     console.log(err);
