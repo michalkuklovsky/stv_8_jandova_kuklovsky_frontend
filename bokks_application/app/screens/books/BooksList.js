@@ -16,7 +16,6 @@ import { NavigationBar } from '../../navigator/Navigator';
 import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 import Cache from '../../utility/Cache';
 import {getData} from '../../utility/GetData.js';
-import {emitResponseDecl} from "react-native/ReactCommon/hermes/inspector/tools/msggen/src/HeaderWriter";
 
 const booksURL = appURL + 'books';
 
