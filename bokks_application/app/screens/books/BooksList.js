@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
     View,
-    Text,
     FlatList,
     StyleSheet,
     SafeAreaView,
@@ -12,22 +11,15 @@ import {
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { BooksHeader} from '../../components/Headers';
 import { appURL } from '../../Constants';
-import { NavigationBar } from '../../navigator/Navigator';
-import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
-import Cache from '../../utility/Cache';
-import {getData} from '../../utility/GetData.js';
+import {getData} from '../../utility/HandleRequest.js';
 
 const booksURL = appURL + 'books';
 
 const Book = ({navigation, book}) => {
-
     const showDetail = () => {
         navigation.navigate("BookInfo", {book: book});
     };
-
-
     return (
-        // <View>
         <Pressable onPress={showDetail}>
             <Card style={styles.card}>
                 <View style={styles.cardView}>
@@ -39,25 +31,18 @@ const Book = ({navigation, book}) => {
                 </View>
             </Card>
         </Pressable>
-        // </View>
     );
 };
 
 const BooksListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
-    const netInfo = useNetInfo();
-
 
     useEffect(() => {
         getData(booksURL)
-            .then(res => {
-                // console.log('data', res);
-                setBooks(res.books)
-            })
+            .then(res => setBooks(res.books))
             .finally(() => setLoading(false));
          }, [route]);
-
 
     return (
         <SafeAreaView>

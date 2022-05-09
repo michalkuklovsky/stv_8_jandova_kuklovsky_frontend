@@ -12,7 +12,7 @@ import {
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { EventsHeader} from '../../components/Headers';
 import {appURL} from '../../Constants';
-
+import {getData} from '../../utility/HandleRequest.js';
 
 const eventsURL = appURL + 'events';
 
@@ -41,15 +41,8 @@ const EventsListScreen = ({navigation, route}) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        fetch(eventsURL, {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(json => {
-                setEvents(json.events);
-                // navigation.navigate();
-            })
-            .catch(error => alert(error))
+        getData(eventsURL)
+            .then(res => setEvents(res.events))
             .finally(() => setLoading(false));
     }, [route]);
 
