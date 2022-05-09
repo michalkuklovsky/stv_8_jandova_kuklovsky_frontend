@@ -10,10 +10,6 @@ export const AuthProvider = ({children}) => {
 
     const storeUser = async (email, is_admin) => {
         try {
-            // console.log(JSON.stringify(email));
-            // console.log(JSON.stringify(is_admin));
-            // TO-DO zistit ci funguju JSONY !!
-            // await AsyncStorage.setItem("user", JSON.stringify({email: email, is_admin: is_admin}));
             if (is_admin) {
                 await AsyncStorage.setItem("role", "admin");
                 setRole("admin");

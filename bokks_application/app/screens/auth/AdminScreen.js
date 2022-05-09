@@ -3,7 +3,6 @@ import {ActivityIndicator, Image, Pressable, ScrollView, Text, View} from "react
 import {StyleSheet} from "react-native";
 import {ScreenHeader} from "../../components/Headers";
 import {appURL} from "../../Constants";
-// import {getUser} from "../../StorageController";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from '../../context/AuthContext';
 
@@ -13,20 +12,9 @@ const logoutURL = appURL + 'logout';
 const AdminScreen = ({navigation, route}) => {
     const [loading, setLoading] = useState(true);
     const [logout, setLogout] = useState(false);
-    const {role, getUser, removeUser} = useContext(AuthContext);
+    const {role, email, getUser, removeUser} = useContext(AuthContext);
 
     useEffect( () => {
-
-        // getUser()
-        //     .then(
-        //     if (role === "unknown") {
-        //         alert("Unauthorized user. Please log in.");
-        //         return navigation.navigate("Home", {});
-        //     } else if (role === "user") {
-        //         alert("Forbidden.");
-        //         return navigation.navigate("Home", {});
-        // })
-        // .finally(setLoading(false));
        let unmounted = false
        getUser();
         if (role === "unknown") {
@@ -95,8 +83,9 @@ const AdminScreen = ({navigation, route}) => {
 
                     <View style={styles.container}>
                         <View style={styles.card}>
-                            <Image style={styles.avatar} source={{uri: "https://logodix.com/logo/1707088.png"}} />
-                            <Text style={styles.cardTittle}> {role} </Text>
+                            <Image style={styles.avatar} source={require("../../images/profile.png")} />
+                            <Text style={styles.cardTittle}> Admin </Text>
+                            <Text style={styles.cardTittle}> {email} </Text>
                         </View>
 
                         <View style={styles.card}>
@@ -139,9 +128,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 10,
         padding: 10,
-        height: 200,
+        height: 240,
         marginTop: 10,
         alignItems: "center",
+        justifyContent: "center",
     },
     btn: {
         width: 220,

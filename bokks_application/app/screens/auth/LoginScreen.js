@@ -27,14 +27,12 @@ const LoginScreen = ({navigation}) => {
       },
       body: JSON.stringify(data),
     })  .then(response => {
-        // console.log(response);
           const resStatus = response.status;
           const resData = response.json();
           return Promise.all([resStatus, resData]);
     })  .then( res => ( {resStatus: res[0], resData: res[1]}))
         .then( (res) => {
         if (res.resStatus === 200) {
-          // console.log(res.resData.user.email, res.resData.user.is_admin);
           storeUser(res.resData.user.email, res.resData.user.is_admin);
           navigation.navigate('Home', {});
         } else {
