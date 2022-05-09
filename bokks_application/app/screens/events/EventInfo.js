@@ -3,6 +3,8 @@ import {Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native
 import {Switch, Paragraph, Subheading, TextInput, Title} from "react-native-paper";
 import {ScreenHeader} from "../../components/Headers";
 import { appURL } from "../../Constants";
+import ImagePicker from 'react-native-image-crop-picker';
+
 
 const EventInfo = ({navigation, route}) => {
     const event = route.params.event;
@@ -11,6 +13,8 @@ const EventInfo = ({navigation, route}) => {
     const [imgpath, setImgpath] = useState('');
     const [description, setDescription] = useState('');
     const toggledOn = () => setRecover(!recover);
+    const [image, setImage] = useState(undefined);
+
 
     const eventURL = appURL + 'events/' + route.params.event.id;
 
@@ -20,6 +24,7 @@ const EventInfo = ({navigation, route}) => {
 
         if (name !== '') {formdata.append('name', name); changed = true;}
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
+        if (image !== undefined && image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
 
         if (changed) {
@@ -42,6 +47,16 @@ const EventInfo = ({navigation, route}) => {
         navigation.navigate('EventsList', {});
     };
 
+    const uploadImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+              setImage(image);
+          });
+    };
+
     return (
         <View styles={styles.container}>
             {/*<View>*/}
@@ -49,10 +64,10 @@ const EventInfo = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                {/*<Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} />*/}
-                <Image style={styles.img} source={{ uri: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80' }} />
+                {/* <Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} /> */}
+                <Image style={styles.img} source={{uri:  eventURL + '/' + event.img_path}} />
 
-                <Pressable style={styles.btn}>
+                <Pressable style={styles.btn} onPress={uploadImage}>
                     <Text style={styles.btnText}> Upload </Text>
                 </Pressable>
             </View>
@@ -94,6 +109,8 @@ const CreateEvent = ({navigation, route}) => {
     const [imgpath, setImgpath] = useState('');
     const [description, setDescription] = useState('');
     const toggledOn = () => setRecover(!recover);
+    const [image, setImage] = useState(undefined);
+
 
     const eventURL = appURL + 'events/';
 
@@ -103,6 +120,7 @@ const CreateEvent = ({navigation, route}) => {
 
         if (name !== '') {formdata.append('name', name); changed = true;}
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
+        if (image !== undefined && image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
 
         if (changed) {
@@ -125,6 +143,16 @@ const CreateEvent = ({navigation, route}) => {
         navigation.navigate('EventsList', {});
     };
 
+    const uploadImage = () => {
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+          }).then(image => {
+              setImage(image);
+          });
+    };
+
     return (
         <View styles={styles.container}>
             {/*<View>*/}
@@ -132,8 +160,9 @@ const CreateEvent = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} />
-                <Pressable style={styles.btn} >
+                <Image style={styles.img} source={{ uri: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80' }} />
+
+                <Pressable style={styles.btn} onPress={uploadImage} >
                     <Text style={styles.btnText}> Upload </Text>
                 </Pressable>
             </View>
