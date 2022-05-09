@@ -11,6 +11,7 @@ import {Button, Card, Paragraph, Title} from 'react-native-paper';
 import AppHeader, { HomeHeader } from '../../components/Headers';
 import {appURL} from '../../Constants';
 import {Book} from "../books/GenresResults";
+import {getData} from "../../utility/HandleRequest";
 
 const homeURL = appURL;
 
@@ -39,18 +40,20 @@ const HomeScreen = ({navigation, route}) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch(homeURL, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(json => {
-        setBooks(json.books);
-        setEvents(json.events);
-      })
-      .catch(error => alert(error))
+      getData(homeURL)
+          .then(res => { setEvents(res.events); setBooks(res.books); })
+    // fetch(homeURL, {
+    //   method: 'GET',
+    // })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     setBooks(json.books);
+    //     setEvents(json.events);
+    //   })
+    //   .catch(error => alert(error))
       .finally(() => setLoading(false));
   }, [route]);
-    
+
   return (
     <SafeAreaView>
       {isLoading ? (

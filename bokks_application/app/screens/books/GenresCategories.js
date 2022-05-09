@@ -10,7 +10,7 @@ import {
 import {Colors} from "react-native/Libraries/NewAppScreen";
 import React, {useEffect, useState} from "react";
 import { HomeHeader } from '../../components/Headers';
-
+import {getData} from '../../utility/HandleRequest.js';
 import {appURL} from "../../Constants";
 
 const genresURL = appURL + 'genres/';
@@ -39,13 +39,9 @@ const Genres = ({navigation}) => {
   const renderItem = ({item}) => (<Genre genre={item} navigation={navigation}/>);
 
   useEffect(() => {
-      fetch(genresURL, {
-        method: 'GET',
-      })
-          .then(response => response.json())
-          .then(json => setData(json.genres))
-          .catch(error => alert(error))
-          .then(setLoading(false));
+    getData(genresURL)
+        .then(res => setData(res.genres))
+        .finally(() => setLoading(false));
     },[]
   )
 
