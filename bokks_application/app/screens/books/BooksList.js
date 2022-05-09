@@ -13,8 +13,10 @@ import { Card, Title, Paragraph } from 'react-native-paper';
 import { BooksHeader} from '../../components/Headers';
 import { appURL } from '../../Constants';
 import { NavigationBar } from '../../navigator/Navigator';
-import {useNetInfo} from '@react-native-community/netinfo';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
 import Cache from '../../utility/Cache';
+import {getData} from '../../utility/GetData.js';
+import {emitResponseDecl} from "react-native/ReactCommon/hermes/inspector/tools/msggen/src/HeaderWriter";
 
 const booksURL = appURL + 'books';
 
@@ -45,44 +47,18 @@ const Book = ({navigation, book}) => {
 const BooksListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
+    const netInfo = useNetInfo();
 
 
     useEffect(() => {
-        fetch(booksURL, {
-            method: 'GET',
-        })
-            .then(async (response) => { return await response.json() })
-            .then(async (json) => {
-                // if (!json || json.length === 0) { throw "Unknown error" }
-                setBooks(json.books);
-                return await Cache.store(booksURL, json.books);
-            })
-            // .then(response => response.json() )
-            // .then(json => { setBooks(json.books); })
-        //     .then(response => {
-        //         const status = response.status;
-        //         const data = response.json();
-        //         return Promise.all([status, data]);
-        //     })
-        //     .then( res => ( {status: res[0], data: res[1]}))
-        //     .then( (res) => {
-        //         if (res.status === 200) {
-        //             // console.log(res.data.books);
-        //             setBooks(res.data.books);
-        //             Cache.store(booksURL, books);
-        //         } else {
-        //             alert(res.resData.error.message);
-        //         }
-        // })
-            .catch(error => {
-                if (error.message === "Network request failed") {
-                    setBooks(Cache.get(booksURL));
-                } else {
-                    console.log(error.message);
-                }
+        getData(booksURL)
+            .then(res => {
+                // console.log('data', res);
+                setBooks(res.books)
             })
             .finally(() => setLoading(false));
-    }, [route]);
+         }, [route]);
+
 
     return (
         <SafeAreaView>
@@ -102,9 +78,6 @@ const BooksListScreen = ({navigation, route}) => {
                             contentContainerStyle={styles.listContainer}
                             nestedScrollEnabled={true}
                         />
-                    </View>
-                    <View style={styles.navbar}>
-                        <NavigationBar />
                     </View>
                 </View>
             )}
