@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
-import {Switch, Paragraph, Subheading, TextInput, Title} from "react-native-paper";
+import {Switch, Paragraph, Subheading, TextInput, Title, Checkbox} from "react-native-paper";
 import {BooksHeader, ScreenHeader} from "../../components/Headers";
 import { appURL } from "../../Constants";
 import ImagePicker from 'react-native-image-crop-picker';
 
 const BookInfo = ({navigation, route}) => {
-    const book = route.params.book;
-    const [recover, setRecover] = useState(false);
-    const toggledOn = () => setRecover(!recover);
-
+    const [book, setBook] = useState(route.params.book);
     const [title, setTitle] = useState('');
     const [author, setAuhtor] = useState('');
     const [price, setPrice] = useState('');
@@ -20,7 +17,9 @@ const BookInfo = ({navigation, route}) => {
     const [description, setDescription] = useState('');
     const [genre, setGenre] = useState('');
     const [image, setImage] = useState(undefined);
-
+    const [checked, setChecked] = useState(false);
+    const delState = book.deleted_at === null ? false : true;
+    const [isDeleted, setDeleted] = useState(delState);
     const bookURL = appURL + 'books/' + route.params.book.id;
 
     const save = () => {
@@ -37,29 +36,40 @@ const BookInfo = ({navigation, route}) => {
         if (quantity !== '') {formdata.append('quantity', quantity); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
         if (genre !== '') {formdata.append('genres', genre); changed = true;}
+        if (isDeleted && checked) {formdata.append('deleted_at', 'recover'); changed = true;}
 
         if (changed) {
             fetch(bookURL,{
-                method: 'put',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
                 body: formdata,
                 })
                 .then(response => {
-                    console.log(bookURL + " -> HTTP PUT sent");
-                    // console.log(response.json());
+                    // console.log(bookURL + " -> HTTP PUT sent");
+                   if (response.status === 200) {setDeleted(!isDeleted);}
                 })
                 .catch(err => {
                     console.log(err);
                 });
-                changed = false;
         }
-
-        navigation.navigate('BooksList', {});
+        navigation.navigate('BooksList', {route});
     };
 
-
+    const onDelete = () =>{
+        fetch(bookURL,{
+            method: 'DELETE'
+            })
+            .then(response => {
+                if (response.status === 204) {setDeleted(true);}
+                // console.log(bookURL + " -> HTTP DELETE response received:" + response.status);
+            })
+            .catch(err => {
+                alert(err);
+        });
+        return navigation.navigate('BooksList', {route});
+    }
 
     const uploadImage = () => {
         ImagePicker.openPicker({
@@ -95,8 +105,18 @@ const BookInfo = ({navigation, route}) => {
                 <TextInput mode="outlined" label="Genre" onChangeText={text => setGenre(text)} value={book.genres__name} />
             </View>
             <View style={styles.btnContainer}>
-                <Subheading>Recover</Subheading>
-                <Switch color={"#a3c6ff"} value={recover} onValueChange={toggledOn} />
+                { isDeleted ? (
+                    <View style={styles.switchContainer}>
+                        <Subheading style={{alignSelf: "center"}}> Recover </Subheading>
+                        {/*<Switch color={"#a3c6ff"} value={recover} onValueChange={() => setDeleted(!isDeleted) } />*/}
+                        <Checkbox color={"#a3c6ff"} status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)}/>
+                    </View>
+                    ) : (
+                    <Pressable style={styles.btn} onPress={onDelete}>
+                        <Text style={styles.btnText}> Delete </Text>
+                    </Pressable>
+                    )
+                }
                 <Pressable style={styles.btn} onPress={save}>
                     <Text style={styles.btnText}> Save </Text>
                 </Pressable>
@@ -167,7 +187,7 @@ const CreateBook = ({navigation, route}) => {
             cropping: true
           }).then(image => {
             setImage(image);
-            console.log(image);
+            // console.log(image);
           });
     };
 
@@ -251,6 +271,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-evenly",
         // bottom: 30,
+    },
+    switchContainer: {
+        flexDirection: "row",
     },
     btn: {
         width: 110,
