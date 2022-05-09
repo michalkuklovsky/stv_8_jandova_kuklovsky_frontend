@@ -2,27 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import { List,  Card, Title, Paragraph, Searchbar, TextInput, Text  } from 'react-native-paper';
 import {appURL} from '../../Constants';
-
-// const Dropdown = ({title, first, second, firstPress, secondPress}) => {
-//     const [expanded, setExpanded] = React.useState(true);
-  
-//     const handlePress = () => setExpanded(!expanded);
-  
-//     return (
-//         <List.Accordion
-//           title={title}
-//         //   left={props => <List.Icon {...props} icon="folder" />}
-//           expanded={expanded}
-//           onPress={handlePress}>
-//           <Pressable onPress={firstPress}>
-//               <List.Item title={first} />
-//           </Pressable>
-//           <Pressable onPress={secondPress}>
-//             <List.Item title={second} />
-//           </Pressable>
-//         </List.Accordion>
-//     );
-//   };
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import OfflineScreen from '../../components/OfflineScreen';
 
 export const Book = ({navigation, book}) => {
     const onPressed = () => {
@@ -56,6 +37,7 @@ const SearchScreen = ({navigation, route, results}) => {
     const [books, setBooks] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
+    const netInfo = useNetInfo();
 
     const onChangeSearch = query => setSearchQuery(query);
 
@@ -129,6 +111,9 @@ const SearchScreen = ({navigation, route, results}) => {
         };
 
     return (
+        !netInfo.isInternetReachable ? (
+            <OfflineScreen />
+          ) : (
         <View>
             <View style={styles.searchView}>
                 <Searchbar
@@ -187,11 +172,8 @@ const SearchScreen = ({navigation, route, results}) => {
                             nestedScrollEnabled={true}
                         />
                     </View>
-
-            {/* <View>
-
-            </View> */}
         </View>
+          )
     );
 };
 

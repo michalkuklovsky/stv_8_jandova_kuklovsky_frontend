@@ -1,11 +1,13 @@
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable, SafeAreaView} from 'react-native';
 import {Text, TextInput, Button} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {appURL} from '../../Constants';
 import {HomeHeader} from "../../components/Headers";
 // import {storeUser, removeUser, getUser} from "../../StorageController";
 import { AuthContext } from '../../context/AuthContext';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import OfflineScreen from '../../components/OfflineScreen';
 
 const loginURL = appURL + 'login';
 const logoutURL = appURL + 'logout';
@@ -17,6 +19,8 @@ const LoginScreen = ({navigation}) => {
   const data = {email: email, password: password};
   const [loading, setLoading] = useState(false);
   const {storeUser, removeUser} = useContext(AuthContext);
+  const netInfo = useNetInfo();
+
 
   const onLogin = () => {
     fetch(loginURL, {
@@ -66,35 +70,39 @@ const LoginScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.root}>
-      <HomeHeader navigation={navigation} />
-      <View style={styles.content}>
+      !netInfo.isInternetReachable ? (
+          <OfflineScreen />
+        ) : (
+          <View style={styles.root}>
+            <HomeHeader navigation={navigation} />
+            <View style={styles.content}>
 
-        <Text style={styles.heading}>LOG IN</Text>
+              <Text style={styles.heading}>LOG IN</Text>
 
-        <TextInput
-          label="Email Address"
-          onChangeText={email => setEmail(email)}
-          mode="outlined"
-          style={styles.input}
-        />
-        <TextInput
-          secureTextEntry={true}
-          label="Password"
-          onChangeText={psd => setPassword(psd)}
-          mode="outlined"
-          style={styles.input}
-        />
+              <TextInput
+                label="Email Address"
+                onChangeText={email => setEmail(email)}
+                mode="outlined"
+                style={styles.input}
+              />
+              <TextInput
+                secureTextEntry={true}
+                label="Password"
+                onChangeText={psd => setPassword(psd)}
+                mode="outlined"
+                style={styles.input}
+              />
 
-        <Pressable style={styles.btn} onPress={onLogin} >
-          <Text style={styles.btnText}> LOG IN </Text>
-        </Pressable>
-        <Pressable style={styles.btn} onPress={onLogout} >
-          <Text style={styles.btnText}> LOG OUT </Text>
-        </Pressable>
+              <Pressable style={styles.btn} onPress={onLogin} >
+                <Text style={styles.btnText}> LOG IN </Text>
+              </Pressable>
+              <Pressable style={styles.btn} onPress={onLogout} >
+                <Text style={styles.btnText}> LOG OUT </Text>
+              </Pressable>
 
-      </View>
-    </View>
+            </View>
+          </View>
+    )
   );
 }
 
