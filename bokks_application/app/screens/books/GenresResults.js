@@ -3,6 +3,7 @@ import {ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, 
 import { Card, Title, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
 import { ScreenHeader } from '../../components/Headers';
+import {getData} from "../../utility/HandleRequest";
 
 const genresURL = appURL + 'genres';
 
@@ -12,7 +13,6 @@ export const Book = ({navigation, book}) => {
     }
 
     return (
-        // <View>
         <Pressable onPress={onPressed}>
             <Card style={styles.card}>
                 <View style={styles.imageContainer}>
@@ -22,23 +22,21 @@ export const Book = ({navigation, book}) => {
                 <Paragraph style={styles.imgSub}> {book.price} € </Paragraph>
             </Card>
         </Pressable>
-        // </View>
     )
 }
 
 const GenreResults = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
+    const genreName = route.params.name;
 
     useEffect(() => {
-          fetch( genresURL + '/?query=' + route.params.name, {
-            method: 'GET',
-          })
-              .then(response => response.json())
-              .then(json => setBooks(json.books))
-              .catch(error => alert(error))
-              .then(setLoading(false));
-        }, [route]
+        getData(genresURL + '/?query=' + route.params.name,)
+            .then(res => {
+                setBooks(res.books);
+            })
+            .finally(() => setLoading(false));
+        }, []
     )
     return (
         <SafeAreaView>
@@ -46,21 +44,26 @@ const GenreResults = ({navigation, route}) => {
                 <View>
                     <ScreenHeader navigation={navigation} />
                     <View style={styles.titleContainer}>
-                        <Text style={styles.mainTitle}> Results </Text>
+                        <Text style={styles.mainTitle}> Results for {genreName}</Text>
                     </View>
+                    { books && books.length > 0 ? (
 
                     <View style={styles.mainContainer}>
-                        <FlatList
-                            data={books}
-                            keyExtractor={( {id}, index) => id}
-                            renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
-                            numColumns={2}
-                            styles={styles.booksList}
-                            contentContainerStyle={styles.listContainer}
-                            nestedScrollEnabled={true}
-                        />
+                            <FlatList
+                                data={books}
+                                keyExtractor={( {id}, index) => id}
+                                renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
+                                numColumns={2}
+                                styles={styles.booksList}
+                                contentContainerStyle={styles.listContainer}
+                                nestedScrollEnabled={true}
+                            />
                     </View>
-
+                    ) : (
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.mainTitle}> No books found for this genre! </Text>
+                        </View>
+                    ) }
                 </View>
             )}
         </SafeAreaView>
