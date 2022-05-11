@@ -12,6 +12,10 @@ import React, {useEffect, useState} from "react";
 import { HomeHeader } from '../../components/Headers';
 import {getData} from '../../utility/HandleRequest.js';
 import {appURL} from "../../Constants";
+import OfflineScreen from '../../components/OfflineScreen';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+
+
 
 const genresURL = appURL + 'genres/';
 
@@ -37,31 +41,39 @@ const Genres = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const renderItem = ({item}) => (<Genre genre={item} navigation={navigation}/>);
+  const netInfo = useNetInfo();
 
   useEffect(() => {
     getData(genresURL)
         .then(res => setData(res.genres))
+        .catch(() => {})
         .finally(() => setLoading(false));
     },[]
-  )
+  );
 
   return (
       <View style={Colors.lighter} >
         {isLoading ? <ActivityIndicator/> : (
             <View>
-              <HomeHeader navigation={navigation} />
-              <View style={styles.mainTitleContainer}>
-                <Text style={styles.mainTitle}> Genres </Text>
-              </View>
-              <FlatList
-                  data={data}
-                  keyExtractor={( {id}, index) => id}
-                  renderItem={renderItem}
-                  numColumns={2}
-                  styles={styles.listContainer}
-                  nestedScrollEnabled={true}
-              />
-            </View>
+              { data && data.length > 0 ? (
+               <View>
+                <HomeHeader navigation={navigation} />
+                <View style={styles.mainTitleContainer}>
+                  <Text style={styles.mainTitle}> Genres </Text>
+                </View>
+                <FlatList
+                    data={data}
+                    keyExtractor={( {id}, index) => id}
+                    renderItem={renderItem}
+                    numColumns={2}
+                    styles={styles.listContainer}
+                    nestedScrollEnabled={true}
+                />
+               </View>
+              ) : (
+                <OfflineScreen navigation={navigation}/>
+            ) }
+      </View>
         )
         }
       </View>

@@ -20,6 +20,7 @@ import EventInfo, { CreateEvent } from '../screens/events/EventInfo';
 import BookInfo, { CreateBook } from '../screens/books/BookInfo';
 import AccountScreen from "../screens/auth/AccountScreen";
 import AdminScreen from "../screens/auth/AdminScreen";
+import OfflineScreen from "../components/OfflineScreen";
 
 const Navigator = () => {
   const Stack = createNativeStackNavigator();
@@ -49,6 +50,7 @@ const Navigator = () => {
         <Stack.Screen name="CreateEvent" component={CreateEvent} />
         <Stack.Screen name="CreateBook" component={CreateBook} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Offline" component={OfflineScreen} />
 
         <Stack.Screen name="Admin" component={AdminScreen} />
         <Stack.Screen name="Account" component={AccountScreen} />

@@ -13,6 +13,8 @@ import { Card, Title, Paragraph } from 'react-native-paper';
 import { EventsHeader} from '../../components/Headers';
 import {appURL} from '../../Constants';
 import {getData} from '../../utility/HandleRequest.js';
+import OfflineScreen from '../../components/OfflineScreen';
+
 
 const eventsURL = appURL + 'events';
 
@@ -43,6 +45,7 @@ const EventsListScreen = ({navigation, route}) => {
     useEffect(() => {
         getData(eventsURL)
             .then(res => setEvents(res.events))
+            .catch(() => {})
             .finally(() => setLoading(false));
     }, [route]);
 
@@ -52,19 +55,25 @@ const EventsListScreen = ({navigation, route}) => {
                 <ActivityIndicator />
             ) : (
                 <View>
-                    <View>
-                        <EventsHeader navigation={navigation}/>
-                    </View>
-                    <View style={styles.mainContainer}>
-                        <FlatList
-                            data={events}
-                            keyExtractor={({id}, index) => id}
-                            renderItem={({item}) => (<Event event={item} navigation={navigation} />)}
-                            styles={styles.booksList}
-                            contentContainerStyle={styles.listContainer}
-                            nestedScrollEnabled={true}
-                        />
-                    </View>
+                    { events && events.length > 0 ? (
+                        <View>
+                            <View>
+                                <EventsHeader navigation={navigation}/>
+                            </View>
+                            <View style={styles.mainContainer}>
+                                <FlatList
+                                    data={events}
+                                    keyExtractor={({id}, index) => id}
+                                    renderItem={({item}) => (<Event event={item} navigation={navigation} />)}
+                                    styles={styles.booksList}
+                                    contentContainerStyle={styles.listContainer}
+                                    nestedScrollEnabled={true}
+                                />
+                            </View>
+                        </View>
+                    ) : (
+                        <OfflineScreen navigation={navigation}/>
+                    ) }
                 </View>
             )}
         </SafeAreaView>

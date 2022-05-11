@@ -4,6 +4,9 @@ import { Card, Title, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
 import { ScreenHeader } from '../../components/Headers';
 import {getData} from "../../utility/HandleRequest";
+import OfflineScreen from "../../components/OfflineScreen";
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+
 
 const genresURL = appURL + 'genres';
 
@@ -29,24 +32,28 @@ const GenreResults = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
     const genreName = route.params.name;
+    const netInfo = useNetInfo();
 
     useEffect(() => {
         getData(genresURL + '/?query=' + route.params.name,)
             .then(res => {
                 setBooks(res.books);
             })
+            .catch(() => {})
             .finally(() => setLoading(false));
-        }, []
+        }, [route]
     )
     return (
         <SafeAreaView>
             {isLoading ? <ActivityIndicator/> : (
                 <View>
+                    { books && books.length > 0 ? (
+                        <View>
                     <ScreenHeader navigation={navigation} />
                     <View style={styles.titleContainer}>
                         <Text style={styles.mainTitle}> Results for {genreName}</Text>
                     </View>
-                    { books && books.length > 0 ? (
+                    
 
                     <View style={styles.mainContainer}>
                             <FlatList
@@ -59,10 +66,9 @@ const GenreResults = ({navigation, route}) => {
                                 nestedScrollEnabled={true}
                             />
                     </View>
+                    </View>
                     ) : (
-                        <View style={styles.titleContainer}>
-                            <Text style={styles.mainTitle}> No books found for this genre! </Text>
-                        </View>
+                        <OfflineScreen navigation={navigation}/>
                     ) }
                 </View>
             )}

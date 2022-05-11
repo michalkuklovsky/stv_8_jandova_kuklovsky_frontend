@@ -112,7 +112,7 @@ const SearchScreen = ({navigation, route, results}) => {
 
     return (
         !netInfo.isInternetReachable ? (
-            <OfflineScreen />
+            <OfflineScreen navigation={navigation}/>
           ) : (
         <View>
             <View style={styles.searchView}>

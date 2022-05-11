@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { BooksHeader} from '../../components/Headers';
+import OfflineScreen from '../../components/OfflineScreen';
 import { appURL } from '../../Constants';
 import {getData} from '../../utility/HandleRequest.js';
 
@@ -41,6 +42,7 @@ const BooksListScreen = ({navigation, route}) => {
     useEffect(() => {
         getData(booksURL)
             .then(res => setBooks(res.books))
+            .catch(() => {})
             .finally(() => setLoading(false));
          }, [route]);
 
@@ -50,19 +52,25 @@ const BooksListScreen = ({navigation, route}) => {
                 <ActivityIndicator />
             ) : (
                 <View>
-                    <View>
-                        <BooksHeader navigation={navigation}/>
-                    </View>
-                    <View style={styles.mainContainer}>
-                        <FlatList
-                            data={books}
-                            keyExtractor={({id}, index) => id}
-                            renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
-                            styles={styles.booksList}
-                            contentContainerStyle={styles.listContainer}
-                            nestedScrollEnabled={true}
-                        />
-                    </View>
+                    { books && books.length > 0 ? (
+                        <View>
+                            <View>
+                                <BooksHeader navigation={navigation}/>
+                            </View>
+                            <View style={styles.mainContainer}>
+                                <FlatList
+                                    data={books}
+                                    keyExtractor={({id}, index) => id}
+                                    renderItem={({item}) => (<Book book={item} navigation={navigation} />)}
+                                    styles={styles.booksList}
+                                    contentContainerStyle={styles.listContainer}
+                                    nestedScrollEnabled={true}
+                                />
+                            </View>
+                        </View>
+                    ) : (
+                        <OfflineScreen navigation={navigation}/>
+                    ) }
                 </View>
             )}
         </SafeAreaView>

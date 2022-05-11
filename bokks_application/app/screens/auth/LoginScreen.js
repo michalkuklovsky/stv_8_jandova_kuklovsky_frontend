@@ -71,7 +71,7 @@ const LoginScreen = ({navigation}) => {
 
   return (
       !netInfo.isInternetReachable ? (
-          <OfflineScreen />
+          <OfflineScreen navigation={navigation}/>
         ) : (
           <View style={styles.root}>
             <HomeHeader navigation={navigation} />
