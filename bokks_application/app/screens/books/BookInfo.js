@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Switch, Paragraph, Subheading, TextInput, Title, Checkbox} from "react-native-paper";
 import {BooksHeader, ScreenHeader} from "../../components/Headers";
 import { appURL } from "../../Constants";
 import ImagePicker from 'react-native-image-crop-picker';
+import {deleteData, postData} from "../../utility/HandleRequest";
+import {useNetInfo} from "@react-native-community/netinfo";
+import {OfflineContext} from "../../context/OfflineContext";
 
 const BookInfo = ({navigation, route}) => {
     const [book, setBook] = useState(route.params.book);
@@ -21,6 +24,8 @@ const BookInfo = ({navigation, route}) => {
     const delState = book.deleted_at === null ? false : true;
     const [isDeleted, setDeleted] = useState(delState);
     const bookURL = appURL + 'books/' + route.params.book.id;
+    let net = useNetInfo();
+    const offline = useContext(OfflineContext);
 
     const save = () => {
         let formdata = new FormData();
@@ -39,35 +44,38 @@ const BookInfo = ({navigation, route}) => {
         if (isDeleted && checked) {formdata.append('deleted_at', 'recover'); changed = true;}
 
         if (changed) {
-            fetch(bookURL,{
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: formdata,
-                })
-                .then(response => {
-                    // console.log(bookURL + " -> HTTP PUT sent");
-                   if (response.status === 200) {setDeleted(!isDeleted);}
-                })
-                .catch(err => {
-                    console.log(err);
+            // fetch(bookURL,{
+            //     method: 'PUT',
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            //     body: formdata,
+            //     })
+            //     .then(response => {
+            //         // console.log(bookURL + " -> HTTP PUT sent");
+            //        if (response.status === 200) {setDeleted(!isDeleted);}
+            //     })
+            postData(net.isInternetReachable, bookURL, 'PUT', 'multipart/form-data', formdata, offline)
+                .catch(err => { console.log("PUT caught: " + err);
                 });
         }
         navigation.navigate('BooksList', {route});
     };
 
     const onDelete = () =>{
-        fetch(bookURL,{
-            method: 'DELETE'
-            })
-            .then(response => {
-                if (response.status === 204) {setDeleted(true);}
-                // console.log(bookURL + " -> HTTP DELETE response received:" + response.status);
-            })
-            .catch(err => {
-                alert(err);
-        });
+        // fetch(bookURL,{
+        //     method: 'DELETE'
+        //     })
+        //     .then(response => {
+        //         if (response.status === 204) {setDeleted(true);}
+        //         // console.log(bookURL + " -> HTTP DELETE response received:" + response.status);
+        //     })
+        //     .catch(err => {
+        //         alert(err);
+        // });
+        deleteData(net.isInternetReachable, bookURL, 'DELETE', offline)
+            .catch(err => { console.log("DELETE caught: " + err);
+            });
         return navigation.navigate('BooksList', {route});
     }
 
@@ -108,7 +116,6 @@ const BookInfo = ({navigation, route}) => {
                 { isDeleted ? (
                     <View style={styles.switchContainer}>
                         <Subheading style={{alignSelf: "center"}}> Recover </Subheading>
-                        {/*<Switch color={"#a3c6ff"} value={recover} onValueChange={() => setDeleted(!isDeleted) } />*/}
                         <Checkbox color={"#a3c6ff"} status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)}/>
                     </View>
                     ) : (
@@ -142,7 +149,8 @@ const CreateBook = ({navigation, route}) => {
     const [description, setDescription] = useState('');
     const [genre, setGenre] = useState('');
     const [image, setImage] = useState();
-
+    let net = useNetInfo();
+    const offline = useContext(OfflineContext);
     const bookURL = appURL + 'books/';
 
     const create = () => {
@@ -161,18 +169,21 @@ const CreateBook = ({navigation, route}) => {
         if (genre !== '') {formdata.append('genres', genre); changed = true;}
 
         if (changed) {
-            fetch(bookURL,{
-                method: 'post',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: formdata,
-                })
-                .then(response => {
-                    console.log(bookURL + " -> HTTP POST sent");
-                })
-                .catch(err => {
-                    console.log(err);
+            // fetch(bookURL,{
+            //     method: 'post',
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            //     body: formdata,
+            //     })
+            //     .then(response => {
+            //         console.log(bookURL + " -> HTTP POST sent");
+            //     })
+            //     .catch(err => {
+            //         console.log(err);
+            //     });
+            postData(net.isInternetReachable, bookURL, 'POST', 'multipart/form-data', formdata, offline)
+                .catch(err => { console.log("PUT caught: " + err);
                 });
                 changed = false;
         }
@@ -187,7 +198,6 @@ const CreateBook = ({navigation, route}) => {
             cropping: true
           }).then(image => {
             setImage(image);
-            // console.log(image);
           });
     };
 

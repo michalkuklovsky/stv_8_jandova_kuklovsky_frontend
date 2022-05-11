@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
     View,
     Text,
@@ -14,9 +14,11 @@ import { EventsHeader} from '../../components/Headers';
 import {appURL} from '../../Constants';
 import {getData} from '../../utility/HandleRequest.js';
 import OfflineScreen from '../../components/OfflineScreen';
+import {useNetInfo} from "@react-native-community/netinfo";
+import {OfflineContext} from "../../context/OfflineContext";
 
 
-const eventsURL = appURL + 'events';
+const eventsURL = appURL + 'events/';
 
 const Event = ({navigation, event}) => {
 
@@ -28,7 +30,7 @@ const Event = ({navigation, event}) => {
             <Card style={styles.card}>
                 <View style={styles.cardView}>
                     <View style={styles.imageContainer}>
-                        <Image style={styles.logo} source={{ uri: eventsURL+'/'+event.id+'/'+event.img_path }} />
+                        <Image style={styles.logo} source={{ uri: eventsURL+event.id+'/'+event.img_path }} />
                     </View>
                     <Title style={styles.imgTitle}> {event.name} </Title>
                     <Paragraph style={styles.imgSub}> User ID: {event.user__id}</Paragraph>
@@ -41,13 +43,15 @@ const Event = ({navigation, event}) => {
 const EventsListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
+    const netInfo = useNetInfo();
+    const { syncQueue } = useContext(OfflineContext);
 
     useEffect(() => {
         getData(eventsURL)
             .then(res => setEvents(res.events))
             .catch(() => {})
             .finally(() => setLoading(false));
-    }, [route]);
+    }, [route, netInfo]);
 
     return (
         <SafeAreaView>

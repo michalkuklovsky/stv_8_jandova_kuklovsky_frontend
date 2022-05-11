@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
     View,
     FlatList,
@@ -13,6 +13,8 @@ import { BooksHeader} from '../../components/Headers';
 import OfflineScreen from '../../components/OfflineScreen';
 import { appURL } from '../../Constants';
 import {getData} from '../../utility/HandleRequest.js';
+import {useNetInfo} from "@react-native-community/netinfo";
+
 
 const booksURL = appURL + 'books';
 
@@ -38,13 +40,14 @@ const Book = ({navigation, book}) => {
 const BooksListScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [books, setBooks] = useState([]);
+    const netInfo = useNetInfo();
 
     useEffect(() => {
         getData(booksURL)
             .then(res => setBooks(res.books))
             .catch(() => {})
             .finally(() => setLoading(false));
-         }, [route]);
+         }, [route, netInfo]);
 
     return (
         <SafeAreaView>

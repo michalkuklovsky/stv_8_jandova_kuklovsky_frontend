@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
-import {Switch, Paragraph, Subheading, TextInput, Title} from "react-native-paper";
+import {Switch, Paragraph, Subheading, TextInput, Title, Checkbox} from "react-native-paper";
 import {ScreenHeader} from "../../components/Headers";
 import { appURL } from "../../Constants";
 import ImagePicker from 'react-native-image-crop-picker';
+import {deleteData, postData} from "../../utility/HandleRequest";
+import {useNetInfo} from "@react-native-community/netinfo";
+import {OfflineContext} from "../../context/OfflineContext";
 
 
 const EventInfo = ({navigation, route}) => {
@@ -12,11 +15,13 @@ const EventInfo = ({navigation, route}) => {
     const [name, setName] = useState('');
     const [imgpath, setImgpath] = useState('');
     const [description, setDescription] = useState('');
-    const toggledOn = () => setRecover(!recover);
     const [image, setImage] = useState(undefined);
-
-
+    let net = useNetInfo();
+    const offline = useContext(OfflineContext);
     const eventURL = appURL + 'events/' + route.params.event.id;
+    const [checked, setChecked] = useState(false);
+    const delState = event.deleted_at === null ? false : true;
+    const [isDeleted, setDeleted] = useState(delState);
 
     const save = () => {
         let formdata = new FormData();
@@ -26,26 +31,37 @@ const EventInfo = ({navigation, route}) => {
         if (imgpath !== '') {formdata.append('img_path', imgpath); changed = true;}
         if (image !== undefined && image !== '') {formdata.append('image', {uri: image.path, name: 'image.jpg', type: 'image/jpeg'}); changed = true;}
         if (description !== '') {formdata.append('description', description); changed = true;}
+        if (isDeleted && checked) {formdata.append('deleted_at', 'recover'); changed = true;}
 
         if (changed) {
-            fetch(eventURL,{
-                method: 'put',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: formdata,
-                })
-                .then(response => {
-                    console.log(eventURL+ " -> HTTP PUT sent");
-                })
-                .catch(err => {
-                    console.log(err);
+            // fetch(eventURL,{
+            //     method: 'put',
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            //     body: formdata,
+            //     })
+            //     .then(response => {
+            //         console.log(eventURL+ " -> HTTP PUT sent");
+            //     })
+            //     .catch(err => {
+            //         console.log(err);
+            //     });
+            //     changed = false;
+            postData(net.isInternetReachable, eventURL, 'PUT', 'multipart/form-data', formdata, offline)
+                .catch(err => { console.log("PUT caught: " + err);
                 });
-                changed = false;
         }
 
         navigation.navigate('EventsList', {});
     };
+
+    const onDelete = () =>{
+        deleteData(net.isInternetReachable, eventURL, 'DELETE', offline)
+            .catch(err => { console.log("DELETE caught: " + err);
+            });
+        return navigation.navigate('EventsList', {route});
+    }
 
     const uploadImage = () => {
         ImagePicker.openPicker({
@@ -64,7 +80,6 @@ const EventInfo = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                {/* <Image style={styles.img} source={{uri:  eventURL+'/'+event.img_path}} /> */}
                 <Image style={styles.img} source={{uri:  eventURL + '/' + event.img_path}} />
 
                 <Pressable style={styles.btn} onPress={uploadImage}>
@@ -90,8 +105,17 @@ const EventInfo = ({navigation, route}) => {
                     onChangeText={text => setDescription(text)} />
             </View>
             <View style={styles.btnContainer}>
-                <Subheading>Recover</Subheading>
-                <Switch color={"#a3c6ff"} value={recover} onValueChange={toggledOn} />
+                { isDeleted ? (
+                    <View style={styles.switchContainer}>
+                        <Subheading style={{alignSelf: "center"}}> Recover </Subheading>
+                        <Checkbox color={"#a3c6ff"} status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)}/>
+                    </View>
+                ) : (
+                    <Pressable style={styles.btn} onPress={onDelete}>
+                        <Text style={styles.btnText}> Delete </Text>
+                    </Pressable>
+                )
+                }
                 <Pressable style={styles.btn} onPress={save}>
                     <Text style={styles.btnText}> Save </Text>
                 </Pressable>
@@ -110,8 +134,8 @@ const CreateEvent = ({navigation, route}) => {
     const [description, setDescription] = useState('');
     const toggledOn = () => setRecover(!recover);
     const [image, setImage] = useState(undefined);
-
-
+    let net = useNetInfo();
+    const offline = useContext(OfflineContext);
     const eventURL = appURL + 'events/';
 
     const create = () => {
@@ -124,22 +148,24 @@ const CreateEvent = ({navigation, route}) => {
         if (description !== '') {formdata.append('description', description); changed = true;}
 
         if (changed) {
-            fetch(eventURL,{
-                method: 'post',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: formdata,
-                })
-                .then(response => {
-                    console.log(eventURL+ " -> HTTP POST sent");
-                })
-                .catch(err => {
-                    console.log(err);
+            // fetch(eventURL,{
+            //     method: 'post',
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            //     body: formdata,
+            //     })
+            //     .then(response => {
+            //         console.log(eventURL+ " -> HTTP POST sent");
+            //     })
+            //     .catch(err => {
+            //         console.log(err);
+            //     });
+            //     changed = false;
+            postData(net.isInternetReachable, eventURL, 'POST', 'multipart/form-data', formdata, offline)
+                .catch(err => { console.log("PUT caught: " + err);
                 });
-                changed = false;
         }
-
         navigation.navigate('EventsList', {});
     };
 
@@ -160,7 +186,7 @@ const CreateEvent = ({navigation, route}) => {
             {/*</View>*/}
         <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.imageContainer}>
-                <Image style={styles.img} source={{ uri: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80' }} />
+                <Image style={styles.img} source={{ uri: eventURL + '/' + event.img_path}} />
 
                 <Pressable style={styles.btn} onPress={uploadImage} >
                     <Text style={styles.btnText}> Upload </Text>
@@ -186,7 +212,6 @@ const CreateEvent = ({navigation, route}) => {
             </View>
             <View style={styles.btnContainer}>
                 <Subheading>Recover</Subheading>
-                <Switch color={"#a3c6ff"} value={recover} onValueChange={toggledOn} />
                 <Pressable style={styles.btn} onPress={create}>
                     <Text style={styles.btnText}> Save </Text>
                 </Pressable>
@@ -211,6 +236,8 @@ const styles = StyleSheet.create({
         padding: 8,
         marginTop: 10,
         paddingBottom: 20,
+        bottom: 30,
+        top: 10,
     },
     infoContainer: {
         flexDirection: "column",
@@ -238,6 +265,9 @@ const styles = StyleSheet.create({
         padding: 14,
         alignItems: "center",
         justifyContent: "space-evenly",
+    },
+    switchContainer: {
+        flexDirection: "row",
     },
     btn: {
         width: 110,

@@ -2,11 +2,9 @@ import React, {useEffect, useState, useContext} from "react";
 import {ActivityIndicator, Image, Pressable, ScrollView, Text, View} from "react-native";
 import {StyleSheet} from "react-native";
 import {ScreenHeader} from "../../components/Headers";
-import {appURL} from "../../Constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { appURL } from "../../Constants";
 import { AuthContext } from '../../context/AuthContext';
 
-const profileURL = appURL + 'profile';
 const logoutURL = appURL + 'logout';
 
 const AccountScreen = ({navigation, route}) => {
