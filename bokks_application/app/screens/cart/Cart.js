@@ -12,6 +12,8 @@ import {
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import {appURL} from '../../Constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import OfflineScreen from '../../components/OfflineScreen';
 
 
 const cartURL = appURL + 'cart';
@@ -24,13 +26,13 @@ const CartItem = ({navigation, item}) => {
             method: 'DELETE',
           })
           .then(response => response)
-          .catch(error => alert(error))
+          .catch(() => {})
           .finally(navigation.navigate('Cart', {}));
-    }
+    };
 
 
     return (
-        <View>
+        <View id={item.id}>
             <Card style={styles.card}>
                 <View style={styles.cardView}>
                     <Title style={styles.imgTitle}> {item.title} </Title>
@@ -59,7 +61,7 @@ const CartScreen = ({navigation, route}) => {
     const [isLoading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
     const [total_sum, setSum] = useState(0);
-
+    const netInfo = useNetInfo();
 
     useEffect(() => {
         fetch(cartURL, {
@@ -69,7 +71,7 @@ const CartScreen = ({navigation, route}) => {
             .then(json => {
                 setCart(json.cart);
             })
-            .catch(error => alert(error))
+            .catch(() => {})
             .finally(() => {
                 setLoading(false);
                 setSum(getTotalSum(cart));
@@ -105,37 +107,39 @@ const CartScreen = ({navigation, route}) => {
                 <ActivityIndicator />
             ) : (
                 <View>
+                    { !netInfo.isInternetReachable ? (
+                        <OfflineScreen navigation={navigation}/>
+                    ) : (
                     <View>
-                        <ScreenHeader navigation={navigation}/>
+                        <View>
+                            <ScreenHeader navigation={navigation}/>
+                        </View>
+                        <Title style={styles.mainTitle}>Your Cart</Title>
+                        <View style={styles.line}/>
+                        <View style={styles.mainContainer}>
+                            <FlatList
+                                data={cart}
+                                keyExtractor={({id}, index) => id}
+                                renderItem={({item}) => (<CartItem item={item} navigation={navigation} />)}
+                                styles={styles.booksList}
+                                contentContainerStyle={styles.listContainer}
+                                nestedScrollEnabled={true}
+                            />
+                        </View>
+                        <View style={styles.line}/>
+                        <View style={styles.priceView}>
+                            <Title style={styles.price}>Total price</Title>
+                            <Title style={styles.price}> {total_sum.toFixed(2)} € </Title>
+                        </View>
+                        <Button
+                            onPress={checkout}
+                            style={styles.btn}
+                            contentStyle={styles.btnContent}
+                        >
+                            <Text style={styles.text}>Procceed to checkout</Text>
+                        </Button>
                     </View>
-                    <Title style={styles.mainTitle}>Your Cart</Title>
-                    <View style={styles.line}/>
-                    <View style={styles.mainContainer}>
-                        <FlatList
-                            data={cart}
-                            keyExtractor={({id}, index) => id}
-                            renderItem={({item}) => (<CartItem item={item} navigation={navigation} />)}
-                            styles={styles.booksList}
-                            contentContainerStyle={styles.listContainer}
-                            nestedScrollEnabled={true}
-                        />
-                    </View>
-                    <View style={styles.line}/>
-                    <View style={styles.priceView}>
-                        <Title style={styles.price}>Total price</Title>
-                        <Title style={styles.price}> {total_sum.toFixed(2)} € </Title>
-                    </View>
-                    <Button
-                        onPress={checkout}
-                        style={styles.btn}
-                        contentStyle={styles.btnContent}
-                    >
-                        <Text style={styles.text}>Procceed to checkout</Text>
-                    </Button>
-
-                    {/* <View style={styles.navbar}>
-                        <NavigationBar />
-                    </View> */}
+                    )}
                 </View>
             )}
         </SafeAreaView>

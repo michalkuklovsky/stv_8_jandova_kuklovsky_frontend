@@ -12,8 +12,8 @@ const genresURL = appURL + 'genres';
 
 export const Book = ({navigation, book}) => {
     const onPressed = () => {
-        navigation.navigate("BookDetail", {id: book.id})
-    }
+        navigation.navigate("BookDetail", {book: book, id: book.id});
+    };
 
     return (
         <Pressable onPress={onPressed}>

@@ -1,122 +1,126 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {ActivityIndicator, Pressable, SafeAreaView, StyleSheet, Text, ScrollView, View, Image} from "react-native";
 import { List, Title, Subheading, Paragraph } from "react-native-paper";
 import {appURL} from "../../Constants";
 import {ScreenHeader} from "../../components/Headers";
 import {NavigationBar} from "../../navigator/Navigator";
+import NetInfo, {useNetInfo} from '@react-native-community/netinfo';
+import {getData} from '../../utility/HandleRequest.js';
+import { AuthContext } from '../../context/AuthContext';
+import OfflineScreen from "../../components/OfflineScreen";
+
+
 
 const bookURL = appURL + 'books/'
 const cartURL = appURL + 'cart/'
 
 const BookDetailScreen = ({navigation, route}) => {
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [book, setBook] = useState({});
-    const [profile, setProfile] = useState({});
+    const {role, email, getUser, removeUser} = useContext(AuthContext);
 
-    useEffect(() => {
-        fetch( appURL+'profile', {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(json => setProfile(json.user))
-            .catch(error => alert(error))
-            .then(setLoading(false));
-    }, [route]
-)
+    const netInfo = useNetInfo();
 
     const addToCart = () => {
 
-        if (profile === undefined) {
-            alert('You are not logged in');
-            navigation.navigate('NavBar', {screen: 'Login'});
+        getUser();
+        if (role === "unknown") {
+            alert("You are not logged in");
+            return;
+        }
+        
+        if (!netInfo.isInternetReachable) {
+            alert('You are not connected to the internet.');
             return;
         }
 
-            const data = {
-                'title': book.title,
-                'quantity': 1,
-                'price': book.price,
-            };
+        const data = {
+            'title': book.title,
+            'quantity': 1,
+            'price': book.price,
+        };
 
-            fetch( cartURL, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .catch(error => alert(error))
-                .then(setLoading(false));
+        fetch( cartURL, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .catch(error => alert(error))
+            .then(setLoading(false));
+        
+        alert('Book was added to your cart.');    
     }
     const showDetail = () => {
         navigation.navigate("BookInfo", {book: book});
     }
 
     useEffect(() => {
-            fetch( bookURL + route.params.id, {
-                method: 'GET',
-            })
-                .then(response => response.json())
-                .then(json => setBook(json.book))
-                .catch(error => alert(error))
-                .then(setLoading(false));
+            getData(bookURL + route.params.id)
+                .then(res => setBook(res.book))
+                .catch(() => {})
+                .finally(() => setLoading(false));
         }, [route]
     )
 
     return (
-        <View style={styles.container}>
-            <View>
-                <ScreenHeader navigation={navigation} />
-            </View>
-            {isLoading ? <ActivityIndicator/> : (
-            <View>
-                <ScrollView contentContainerStyle={styles.content}>
-                    <View style={styles.card}>
-                        <View style={styles.imageContainer}>
-                            <Image style={styles.img} source={{uri: appURL + 'books/' + book.id + '/' + book.img_path}} />
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <Title style={styles.infoTitle}> {book.title} </Title>
-                            <Subheading style={styles.infoSub}> {book.authors__name}</Subheading>
-                            <Paragraph style={styles.infoPar}> {book.price} € </Paragraph>
-                            <View style={styles.btnContainer}>
-                                <Pressable style={styles.btn} onPress={addToCart} >
-                                    <Text style={styles.btnText}> Add to cart </Text>
-                                </Pressable>
-                                {/* <Pressable style={styles.btn} onPress={showDetail} >
-                                    <Text style={styles.btnText}> Detail </Text>
-                                </Pressable> */}
+        <View>
+            { book && Object.keys(book).length > 0  ? (
+                <View style={styles.container}>
+                <View>
+                    <ScreenHeader navigation={navigation} />
+                </View>
+                {isLoading ? <ActivityIndicator/> : (
+                <View>
+                    <ScrollView contentContainerStyle={styles.content}>
+                        <View style={styles.card}>
+                            <View style={styles.imageContainer}>
+                                <Image style={styles.img} source={{uri: appURL + 'books/' + book.id + '/' + book.img_path}} />
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <Title style={styles.infoTitle}> {book.title} </Title>
+                                <Subheading style={styles.infoSub}> {book.authors__name}</Subheading>
+                                <Paragraph style={styles.infoPar}> {book.price} € </Paragraph>
+                                <View style={styles.btnContainer}>
+                                    <Pressable style={styles.btn} onPress={addToCart} >
+                                        <Text style={styles.btnText}> Add to cart </Text>
+                                    </Pressable>
+                                    {/* <Pressable style={styles.btn} onPress={showDetail} >
+                                        <Text style={styles.btnText}> Detail </Text>
+                                    </Pressable> */}
+                                </View>
                             </View>
                         </View>
-                    </View>
-
-                    <View style={styles.detailsContainer}>
-                        <View style={styles.sectionTitle} >
-                            <Title>Details</Title>
+    
+                        <View style={styles.detailsContainer}>
+                            <View style={styles.sectionTitle} >
+                                <Title>Details</Title>
+                            </View>
+                            <View style={styles.section} >
+                                <Subheading> Release Year: {book.release_year} </Subheading>
+                                <Subheading> ISBN: {book.isbn} </Subheading>
+                            </View>
                         </View>
-                        <View style={styles.section} >
-                            <Subheading> Release Year: {book.release_year} </Subheading>
-                            <Subheading> ISBN: {book.isbn} </Subheading>
+    
+                        <View style={styles.descriptionContainer}>
+                            <View style={styles.sectionTitle} >
+                                <Title>Description</Title>
+                            </View>
+                            <View style={styles.section} >
+                                <Paragraph> {book.description} </Paragraph>
+                            </View>
                         </View>
-                    </View>
-
-                    <View style={styles.descriptionContainer}>
-                        <View style={styles.sectionTitle} >
-                            <Title>Description</Title>
-                        </View>
-                        <View style={styles.section} >
-                            <Paragraph> {book.description} </Paragraph>
-                        </View>
-                    </View>
-
-                </ScrollView>
+    
+                    </ScrollView>
+                </View>
+                )}
             </View>
-            )}
-            {/*<View>*/}
-            {/*    <NavigationBar />*/}
-            {/*</View>*/}
+         ) : ( 
+            <OfflineScreen navigation={navigation}/>
+        )}
         </View>
     );
 }
