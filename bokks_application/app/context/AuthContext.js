@@ -4,7 +4,6 @@ import React, {createContext, useEffect, useState} from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState({});
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("unknown");
 
