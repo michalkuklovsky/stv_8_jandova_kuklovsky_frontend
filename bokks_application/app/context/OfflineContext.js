@@ -45,12 +45,19 @@ export const OfflineProvider = ({children}) => {
 
         for (let i = 0; i < newQueue.length; i++){
             let item = JSON.parse(newQueue[i]);
-            let formdata = new FormData();
-            for (const [key, val] of Object.entries(item['requestBody']['body'])){
-                formdata.append(key, val);
+            let response;
+            if (item['requestBody']['method'] != 'DELETE') {
+                let formdata = new FormData();
+                for (const [key, val] of Object.entries(item['requestBody']['body'])) {
+                    formdata.append(key, val);
+                }
+                item['requestBody']['body'] = formdata;
+                response = await fetch(item['url'], item['requestBody']).catch(() => {
+                })
+            } else {
+                response = await fetch(item['url'], item['requestBody']).catch(() => {
+                })
             }
-            item['requestBody']['body'] = formdata;
-            const response = await fetch(item['url'], item['requestBody']).catch(() => {});
             if (response && response.ok) {
                 alert("Data synchronization was successful! ");
             }
