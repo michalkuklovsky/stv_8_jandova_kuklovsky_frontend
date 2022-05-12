@@ -88,10 +88,10 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   genreContainer: {
-    marginHorizontal: 24,
-    marginBottom: 20,
-    width: 140,
-    height: 140,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    width: 150,
+    height: 150,
     borderRadius: 90,
     backgroundColor: "#96beff",
     justifyContent: "center",
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   mainTitleContainer: {
-    margin: 20,
+    margin: 16,
   },
   mainTitle: {
     fontSize: 26,
